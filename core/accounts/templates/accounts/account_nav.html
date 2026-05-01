@@ -1,0 +1,51 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+
+<style>
+  .account-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+
+    /* default: fully transparent */
+    background: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border-bottom: 0.5px solid transparent;
+
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+  }
+
+/* scrolled: 30% opacity frosted glass */
+.account-nav.scrolled {
+  background: rgba(15, 23, 42, 0.3); /* adjust color to match your bg */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+.nav-logo {
+    color: #004c1e;
+    text-decoration: none;
+    font-weight: 900;
+}
+</style>
+<nav class="account-nav" id="accountNav">
+  <div class="nav-left">
+    <a href="{% url 'welcome' %}" class="nav-logo">
+      <img src="{% static 'images/brand-logo.png' %}" alt="Logo" style="height: 40px;" />
+    </a>
+  </div>
+</nav>
+<script>
+  // Add scroll listener to toggle 'scrolled' class
+ const nav = document.getElementById('accountNav');
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 10);
+});
+</script>

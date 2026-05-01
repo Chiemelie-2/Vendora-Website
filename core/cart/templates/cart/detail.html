@@ -1,0 +1,50 @@
+<!-- cart/templates/cart/detail.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="cart-container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Your Basket</h1>
+        {% if cart %}
+            <a href="{% url 'cart:cart_clear' %}" style="color: #999; font-size: 0.8rem;">Clear Basket</a>
+        {% endif %}
+    </div>
+
+    {% for item in cart %}
+        {% with product=item.item %}
+        <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0;">
+            <div class="item-info">
+                <h3 style="margin: 0;">{{ product.name }}</h3>
+                <p style="color: #666; margin: 5px 0;">${{ item.price }} per item</p>
+            </div>
+
+            <!-- QUANTITY CONTROLS -->
+            <div class="quantity-controls" style="display: flex; align-items: center; gap: 15px;">
+                <a href="{% url 'cart:cart_decrement' product.id %}" class="qty-btn" style="text-decoration: none; background: #eee; padding: 5px 12px; border-radius: 5px; color: #000;">-</a>
+                <span style="font-weight: bold;">{{ item.quantity }}</span>
+                <a href="{% url 'cart:cart_add' product.id %}" class="qty-btn" style="text-decoration: none; background: #eee; padding: 5px 12px; border-radius: 5px; color: #000;">+</a>
+            </div>
+
+            <div class="item-total" style="text-align: right; min-width: 80px;">
+                <span style="font-weight: bold;">${{ item.total_price }}</span>
+            </div>
+        </div>
+        {% endwith %}
+    {% empty %}
+        <p>Your basket is empty. <a href="{% url 'restaurants:home' %}">Start ordering!</a></p>
+    {% endfor %}
+
+    <!-- Update the bottom of cart/templates/cart/detail.html -->
+    {% if cart.get_total_price > 0 %}
+        <div class="cart-footer" style="margin-top: 30px; text-align: right;">
+            <h2 style="margin-bottom: 10px;">Subtotal: ${{ cart.get_total_price }}</h2>
+            <p style="color: #666; margin-bottom: 20px;">Fees and taxes calculated at checkout</p>
+            
+            <!-- This will lead to the Order Creation/Payment page -->
+            <a href="{% url 'orders:order_create' %}" class="btn-get-started" style="padding: 15px 50px; background: #000; color: #fff; border-radius: 10px; text-decoration: none;">
+                Proceed to Checkout
+            </a>
+        </div>
+    {% endif %}
+
+</div>

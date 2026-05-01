@@ -1,0 +1,54 @@
+<div class="account-settings-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="{% url 'accounts:manage_account' %}" class="nav-item">Home</a>
+            <a href="{% url 'accounts:personal_info' %}" class="nav-item active">Personal info</a>
+            <a href="{% url 'accounts:security_settings' %}" class="nav-item">Security</a>
+            <a href="#" class="nav-item">Privacy & data</a>
+        </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        <h1 class="personal-info-header">Personal info</h1>
+
+        <div class="profile-avatar-container">
+            <div class="avatar-circle">👤</div>
+            <div class="edit-overlay">✎</div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" style="margin-top: 30px;">
+            {% csrf_token %}
+            
+            <!-- NAME (Static) -->
+            <div class="info-row">
+                <div>
+                    <div class="info-label">Name</div>
+                    <div class="static-value">{{ user.get_full_name|default:user.username }}</div>
+                </div>
+                <span style="color: #dadce0;">🔒</span>
+            </div>
+
+            <!-- PHONE (Editable) -->
+            <div class="info-row">
+                <div style="flex: 1;">
+                    <div class="info-label">Phone number</div>
+                    {{ form.phone_number }}
+                </div>
+                <span>›</span>
+            </div>
+
+            <!-- EMAIL (Editable) -->
+            <div class="info-row">
+                <div style="flex: 1;">
+                    <div class="info-label">Email</div>
+                    {{ form.email }}
+                </div>
+                <span>›</span>
+            </div>
+
+            <button type="submit" class="save-action-btn">Save Changes</button>
+        </form>
+    </main>
+</div>

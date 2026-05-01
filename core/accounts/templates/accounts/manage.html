@@ -1,0 +1,108 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+
+{% include "accounts/account_nav.html" %}
+
+<div class="account-container">
+
+  <!-- SIDEBAR -->
+  <aside class="account-sidebar">
+    <nav>
+      <a href="{% url 'accounts:manage_account' %}" class="active">Home</a>
+      <a href="{% url 'accounts:personal_info' %}">Personal info</a>
+      <a href="{% url 'accounts:security_settings' %}">Security</a>
+      <a href="#">Privacy &amp; Data</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="account-main home-main">
+
+    <!-- ── SECURITY BANNER ── -->
+    {% comment %} <div class="security-banner">
+      <div class="banner-left">
+        <span class="banner-icon">&#9651;</span>
+        <div>
+          <p class="banner-title">Secure your account</p>
+          <p class="banner-sub">Add another login method</p>
+        </div>
+      </div>
+      <a href="#" class="banner-btn">Set up</a>
+    </div> {% endcomment %}
+
+    <!-- ── PROFILE CARD ── -->
+    <div class="home-profile-card">
+      <div class="home-avatar">
+        {% if profile.profile_image and profile.profile_image.name %}
+          <img src="{{ profile.profile_image.url }}" alt="Profile" class="home-avatar-img">
+        {% else %}
+          <div class="home-avatar-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="44" height="44">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </div>
+        {% endif %}
+      </div>
+      <h2 class="home-username">{{ request.user.first_name|default:request.user.username }}</h2>
+      <p class="home-email">{{ request.user.email }}</p>
+    </div>
+
+    <!-- ── 3 SHORTCUT CARDS ── -->
+    <div class="home-cards">
+
+      <a href="{% url 'accounts:personal_info' %}" class="home-card">
+        <span class="home-card-icon">
+          <!-- Person icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+        </span>
+        <span class="home-card-label">Personal info</span>
+      </a>
+
+      <a href="#" class="home-card">
+        <span class="home-card-icon">
+          <!-- Shield / security icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            <path d="M12 2L4 6v6c0 5.25 3.4 10.15 8 11.35C16.6 22.15 20 17.25 20 12V6l-8-4zm-1 13l-3-3 1.4-1.4 1.6 1.6 4.6-4.6L17 9l-6 6z"/>
+          </svg>
+        </span>
+        <span class="home-card-label">Security</span>
+      </a>
+
+      <a href="#" class="home-card">
+        <span class="home-card-icon">
+          <!-- Lock / privacy icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+          </svg>
+        </span>
+        <span class="home-card-label">Privacy &amp; Data</span>
+      </a>
+
+    </div>
+
+    <!-- ── SUGGESTIONS SECTION ── -->
+    <div class="home-suggestions">
+      <h3 class="suggestions-title">Suggestions</h3>
+
+      <div class="suggestion-card">
+        <div class="suggestion-text">
+          <h4 class="suggestion-heading">Complete your account checkup</h4>
+          <p class="suggestion-body">Complete your account checkup to make your account work better for you and keep you secure.</p>
+        </div>
+        <div class="suggestion-illustration">
+          <!-- ID card illustration -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" width="64" height="48">
+            <rect x="2" y="6" width="60" height="36" rx="4" fill="#1a73e8"/>
+            <rect x="8" y="14" width="16" height="16" rx="8" fill="#fff" opacity=".9"/>
+            <rect x="30" y="16" width="26" height="3" rx="1.5" fill="#fff" opacity=".8"/>
+            <rect x="30" y="22" width="18" height="3" rx="1.5" fill="#fff" opacity=".6"/>
+            <rect x="30" y="28" width="22" height="3" rx="1.5" fill="#fff" opacity=".6"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

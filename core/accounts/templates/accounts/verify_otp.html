@@ -1,0 +1,83 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+
+<div class="account-container">
+  <!-- SIDEBAR -->
+  <aside class="account-sidebar">
+    <nav>
+      <a href="{% url 'accounts:manage_account' %}">Home</a>
+      <a href="{% url 'accounts:personal_info' %}" class="active">Personal info</a>
+      <a href="{% url 'accounts:security_settings' %}">Security</a>
+      <a href="#">Privacy &amp; Data</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="account-main" style="max-width: 480px;">
+    <h1>Verify {{ type }}</h1>
+    <p style="color:#5f6368; font-size:14px; margin-bottom:28px;">
+      We sent a 6-digit code to <strong>{{ value }}</strong>.<br>
+      Enter it below to confirm your update.
+    </p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p class="otp-error">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" class="otp-form">
+      {% csrf_token %}
+      <input
+        type="text"
+        name="otp_code"
+        placeholder="- - - - - -"
+        maxlength="6"
+        autocomplete="one-time-code"
+        inputmode="numeric"
+        class="otp-input"
+        autofocus
+      >
+      <button type="submit" class="save-action-btn" style="width:100%; margin-top:20px;">
+        Verify &amp; Update
+      </button>
+    </form>
+
+    <a href="{% url 'accounts:personal_info' %}" style="display:block; margin-top:16px; font-size:13px; color:#1a73e8; text-decoration:none;">
+      ← Back to Personal info
+    </a>
+  </main>
+</div>
+
+<style>
+  .otp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .otp-input {
+    width: 100%;
+    padding: 16px;
+    font-size: 28px;
+    letter-spacing: 12px;
+    text-align: center;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    outline: none;
+    font-family: 'Roboto', monospace;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+  .otp-input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26,115,232,.2);
+  }
+  .otp-error {
+    background: #fce8e6;
+    color: #c5221f;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+</style>

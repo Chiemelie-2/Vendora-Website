@@ -1,0 +1,91 @@
+body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+/* NAVBAR */
+.uber-nav { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; z-index: 1000; }
+.nav-left { display: flex; align-items: center; gap: 20px; }
+.menu-btn { background: none; border: none; cursor: pointer; padding: 5px; }
+.logo { font-size: 1.8rem; font-weight: 800; color: #000; letter-spacing: -1.5px; text-decoration: none; }
+.logo span { font-weight: 400; }
+.nav-right { display: flex; align-items: center; gap: 15px; }
+.nav-link { text-decoration: none; color: black; font-weight: 600; font-size: 0.95rem; padding: 10px 15px; border-radius: 25px; transition: 0.2s; }
+.login-btn { background: white; }
+.signup-btn { background: black; color: white; padding: 12px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; }
+
+/* HERO CONTENT */
+.hero-section { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 80px; }
+.hero-title { font-size: 3.8rem; font-weight: 800; margin-bottom: 35px; color: #000; max-width: 600px; line-height: 1.1; }
+.search-container { display: flex; align-items: center; gap: 15px; max-width: 900px; }
+.search-group { display: flex; align-items: center; background: white; padding: 5px 20px; height: 55px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.address-box { flex: 2; }
+.time-box { flex: 1; border-left: 1px solid #eee; }
+.search-input { width: 100%; border: none; padding: 10px; font-size: 1.05rem; outline: none; }
+.btn-search { background: black; color: white; padding: 0 25px; height: 55px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 1rem; }
+
+/* SIDEBAR SYSTEM */
+#sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; }
+.side-menu { position: fixed; top: 0; left: -300px; width: 260px; height: 100vh; background: white; z-index: 2001; transition: 0.3s ease-in-out; padding: 30px 20px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+.side-menu.active { left: 0; }
+
+/* SIDEBAR CONTENT */
+.btn-side-black { display: block; background: black; color: white; padding: 15px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 10px; }
+.btn-side-white { display: block; background: #f6f6f6; color: black; padding: 15px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 700; }
+.side-links a { display: block; padding: 15px 0; color: black; text-decoration: none; font-weight: 500; }
+.side-footer { position: absolute; bottom: 30px; width: calc(100% - 40px); }
+.uber-eats-sq { background: #06C167; color: white; padding: 8px; font-size: 0.7rem; font-weight: 800; border-radius: 4px; display: inline-block; }
+.app-btns { display: flex; gap: 10px; margin-top: 15px; }
+.app-store-btn { background: #f6f6f6; border: none; padding: 10px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+
+/* Sidebar Header & Profile */
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: #eeeeee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.user-info { display: flex; flex-direction: column; }
+.user-name { font-weight: 700; font-size: 1.1rem; color: #000; }
+.manage-link { font-size: 0.85rem; color: #06C167; text-decoration: none; font-weight: 500; }
+
+/* Navigation Links */
+.side-nav-links a {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    color: #000;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav-icon {
+    width: 30px;
+    font-size: 1.2rem;
+    margin-right: 10px;
+    display: inline-block;
+    text-align: center;
+}
+
+.sign-out-link {
+    margin-top: 10px;
+    color: #555 !important;
+}
+
+.side-divider {
+    border: 0;
+    border-top: 1px solid #eeeeee;
+    margin: 15px 0;
+}

@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: #F5F7F5;
+}
+
+.layout {
+  display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: #145A1F;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+}
+
+.sidebar a.active {
+  background: rgba(255,255,255,0.2);
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.hero-cover img,
+.fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fallback {
+  background: linear-gradient(135deg,#145A1F,#1f7a2e);
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo-box {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.badges span {
+  margin-right: 8px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+}
+
+.green {
+  background: #22c55e;
+}
+
+/* KPI */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* WALLET */
+.wallet {
+  background: #145A1F;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+/* STATUS */
+.status {
+  padding: 4px 8px;
+  border-radius: 10px;
+}
+
+.status.pending { background: orange; }
+.status.preparing { background: blue; color:white; }
+.status.delivered { background: green; color:white; }
+
+/* BUTTON */
+.btn {
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.primary {
+  background: #145A1F;
+  color: white;
+}
+
+.ghost {
+  border: 1px solid white;
+  color: white;
+}

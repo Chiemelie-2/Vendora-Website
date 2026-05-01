@@ -1,0 +1,1310 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Location — Vendora Eats</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/vendor_onboarding.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/location.css' %}" />
+  </head>
+  <body>
+    <div class="shell">
+      <!-- ═══ SIDEBAR ═══════════════════════════════════ -->
+      <div class="sidebar">
+        <div class="sb-logo">
+          <div class="sb-logo-icon">
+            <svg fill="none" height="18" viewbox="0 0 24 24" width="18">
+              <path
+                d="M12 2C8 2 4 5.5 4 10c0 6 8 12 8 12s8-6 8-12c0-4.5-4-8-8-8z"
+                fill="white"
+                opacity=".9"
+              ></path>
+              <circle cx="12" cy="10" fill="#1A7A1A" r="3"></circle>
+            </svg>
+          </div>
+          <span class="sb-logo-name"
+            >Vendora <span class="sb-logo-eats">Eats</span></span
+          >
+        </div>
+        <div class="steps">
+          <div class="step done">
+            <div class="step-dot">
+              <svg fill="none" height="10" viewbox="0 0 24 24" width="10">
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke="#fff"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                ></path>
+              </svg>
+            </div>
+            <div class="step-label">Business info</div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step active">
+            <div class="step-dot">2</div>
+            <div class="step-label">Location</div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step">
+            <div class="step-dot">3</div>
+            <div class="step-label">Store branding</div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step">
+            <div class="step-dot">4</div>
+            <div class="step-label">Menu</div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step">
+            <div class="step-dot">5</div>
+            <div class="step-label">Review &amp; submit</div>
+          </div>
+        </div>
+        <p class="sb-footer">© 2026 Vendora Eats</p>
+      </div>
+      <!-- ═══ MAP AREA ══════════════════════════════════ -->
+      <div class="map-area" id="mapArea">
+        <div class="map-tiles" id="mapTiles"></div>
+        <div class="map-roads" id="mapRoads"></div>
+        <div class="map-green-overlay"></div>
+        <!-- Accuracy ring -->
+        <div class="accuracy-ring" id="accuracyRing"></div>
+        <!-- Center Pin (always centered, map moves) -->
+        <div class="center-pin" id="centerPin">
+          <div class="pin-head">
+            <div class="pin-inner">
+              <svg fill="none" height="20" viewbox="0 0 24 24" width="20">
+                <path
+                  d="M12 2C8 2 4 5.5 4 10c0 6 8 12 8 12s8-6 8-12c0-4.5-4-8-8-8z"
+                  fill="white"
+                  opacity=".9"
+                ></path>
+                <circle cx="12" cy="10" fill="#1A7A1A" r="3"></circle>
+              </svg>
+            </div>
+          </div>
+          <div class="pin-tail"></div>
+          <div class="pin-shadow"></div>
+        </div>
+        <!-- Map zoom -->
+        <div class="map-zoom">
+          <button class="zoom-btn" onclick="zoomMap(1)">+</button>
+          <button class="zoom-btn" onclick="zoomMap(-1)">−</button>
+        </div>
+        <!-- Map brand tag -->
+        <div class="map-brand-tag">
+          Map by <span>Vendora</span> · Move to adjust
+        </div>
+        <!-- Detecting overlay -->
+        <div class="detecting-overlay" id="detectOverlay">
+          <div class="det-spinner"></div>
+          <div class="det-text">Finding your location</div>
+          <div class="det-sub">Please wait…</div>
+        </div>
+      </div>
+      <!-- ═══ SMART PANEL ════════════════════════════════ -->
+      <div class="smart-panel">
+        <div class="panel-header">
+          <div class="panel-step-tag">Step 2 of 5</div>
+          <h1 class="panel-title">Confirm your store location</h1>
+          <p class="panel-sub">Move the map to set your exact position</p>
+        </div>
+        <div class="panel-body" id="panelBody">
+          <!-- Action buttons -->
+          <div class="loc-actions">
+            <button
+              class="loc-action-btn primary"
+              id="detectBtn"
+              onclick="detectLocation()"
+            >
+              <div class="action-icon">
+                <svg fill="none" height="16" viewbox="0 0 24 24" width="16">
+                  <circle cx="12" cy="12" fill="white" r="3"></circle>
+                  <path
+                    d="M12 2v3M12 19v3M2 12h3M19 12h3"
+                    stroke="white"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                  ></path>
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="7"
+                    stroke="white"
+                    stroke-width="1.5"
+                  ></circle>
+                </svg>
+              </div>
+              <div class="action-text">
+                <strong id="detectBtnText">Use my current location</strong>
+                <span>Auto-detect and fill address</span>
+              </div>
+            </button>
+          </div>
+          <!-- Search -->
+          <div class="search-wrap" id="searchWrap">
+            <div class="search-icon">
+              <svg fill="none" height="15" viewbox="0 0 24 24" width="15">
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="7"
+                  stroke="#6B7A6B"
+                  stroke-width="2"
+                ></circle>
+                <path
+                  d="M20 20l-3-3"
+                  stroke="#6B7A6B"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+            </div>
+            <input
+              autocomplete="off"
+              class="search-input"
+              id="searchInput"
+              placeholder="Search address or landmark…"
+              type="text"
+            />
+            <div class="search-results" id="searchResults">
+              <!-- filled by JS -->
+            </div>
+          </div>
+          <!-- Live Address Card -->
+          <div class="address-card" id="addressCard">
+            <div class="ac-label">📍 Selected Location</div>
+            <div class="ac-address" id="acAddress">Move the map to select</div>
+            <div class="ac-landmark" id="acLandmark">—</div>
+            <div class="ac-update-badge">Updated</div>
+          </div>
+          <!-- Accuracy indicator -->
+          <div class="accuracy-bar">
+            <div class="acc-dots" id="accDots">
+              <div class="acc-dot"></div>
+              <div class="acc-dot"></div>
+              <div class="acc-dot"></div>
+              <div class="acc-dot"></div>
+              <div class="acc-dot"></div>
+            </div>
+            <div class="acc-label">
+              Location accuracy: <strong id="accLabel">Waiting…</strong>
+            </div>
+          </div>
+          <!-- Manual address (collapsible) -->
+          <div class="manual-toggle" id="manualToggle" onclick="toggleManual()">
+            <svg fill="none" height="14" viewbox="0 0 24 24" width="14">
+              <path
+                d="M6 9l6 6 6-6"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+            Edit address manually
+          </div>
+          <div class="manual-fields" id="manualFields">
+            <div class="frow">
+              <div class="fg">
+                <label>Street Address</label>
+                <input
+                  id="addr-input"
+                  name="address"
+                  placeholder="12 Zik Avenue"
+                  required=""
+                  type="text"
+                  value="{{ restaurant.address|default:'' }}"
+                />
+              </div>
+              <div class="fg">
+                <label>City</label>
+                <input
+                  id="city-input"
+                  name="city"
+                  placeholder="Awka"
+                  required=""
+                  type="text"
+                  value="{{ restaurant.city|default:'' }}"
+                />
+              </div>
+            </div>
+            <div class="frow">
+              <div class="fg">
+                <label>State</label>
+                <input
+                  id="postcode-input"
+                  name="post_code"
+                  placeholder="Anambra"
+                  required=""
+                  type="text"
+                  value="{{ restaurant.post_code|default:'' }}"
+                />
+              </div>
+              <div class="fg">
+                <label
+                  >Landmark
+                  <span style="color: #bbb; font-weight: 400"
+                    >(optional)</span
+                  ></label
+                >
+                <input
+                  id="landmark-input"
+                  name="landmark"
+                  placeholder="Opp. Shoprite Awka"
+                  type="text"
+                  value="{{ restaurant.landmark|default:'' }}"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /panel-body -->
+        <!-- Sticky footer / CTA -->
+        <div class="panel-footer">
+          <div class="cta-state" id="ctaState">
+            <span class="cta-dot"></span>
+            <span id="ctaStateText">Waiting for location…</span>
+          </div>
+          <form id="locationForm" method="POST">
+            {% csrf_token %}
+            <input id="form-address" name="address" type="hidden" />
+            <input id="form-city" name="city" type="hidden" />
+            <input id="form-postcode" name="post_code" type="hidden" />
+            <input id="form-landmark" name="landmark" type="hidden" />
+            <button
+              class="btn-confirm"
+              disabled=""
+              id="confirmBtn"
+              type="submit"
+            >
+              <svg fill="none" height="16" viewbox="0 0 24 24" width="16">
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke="white"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                ></path>
+              </svg>
+              Confirm Location
+            </button>
+          </form>
+          <button class="btn-back" onclick="window.history.back()">
+            ← Back
+          </button>
+        </div>
+      </div>
+      <!-- /smart-panel -->
+      <!-- ═══ PREMIUM PREVIEW PANEL ═══════════════════ -->
+      <div class="preview-panel">
+        <p class="preview-label">Live Preview</p>
+        <!-- Store Card -->
+        <div class="store-card">
+          <!-- Cover image -->
+          <div class="sc-cover" id="scCover">
+            {% if restaurant.cover_image %}
+            <img alt="Cover" src="{{ restaurant.cover_image.url }}" />
+            {% endif %}
+            <div class="sc-cover-pattern"></div>
+            <div class="sc-cover-gradient"></div>
+            <!-- Floating logo -->
+            <div class="sc-logo" id="scLogo">
+              {% if restaurant.logo %}
+              <img alt="" src="{{ restaurant.logo.url }}" />
+              {% else %} {{ restaurant.name|first|default:"V" }} {% endif %}
+            </div>
+          </div>
+          <!-- Store info -->
+          <div class="sc-info">
+            <div class="sc-name" id="scName">
+              {{ restaurant.name|default:"Your Store Name" }}
+            </div>
+            <div class="sc-meta">
+              <span class="sc-rating">★★★★★ <em>5.0</em></span>
+              <span class="sc-bullet"></span>
+              <span class="sc-open">Open now</span>
+            </div>
+            <div class="sc-desc" id="scDesc">
+              {{ restaurant.description|default:"Your store description goes here. Tell customers about your cuisine, specialties, or unique story." }}
+            </div>
+            <div class="sc-addr-row">
+              <svg fill="none" height="10" viewbox="0 0 24 24" width="10">
+                <path
+                  d="M12 2C8 2 4 5.5 4 10c0 6 8 12 8 12s8-6 8-12c0-4.5-4-8-8-8z"
+                  fill="#6B7A6B"
+                ></path>
+              </svg>
+              <span id="scAddrText">Set your location on the map</span>
+            </div>
+          </div>
+          <div class="sc-divider"></div>
+          <!-- Menu items -->
+          <div class="sc-menu-head">Popular Items</div>
+          <div class="sc-menu-list">
+            {% for item in menu_items|slice:":3" %}
+            <div class="sc-menu-item">
+              <div class="sc-item-img">
+                {% if item.image %}
+                <img alt="" src="{{ item.image.url }}" />
+                {% else %} 🍽 {% endif %}
+              </div>
+              <div class="sc-item-info">
+                <div class="sc-item-name">{{ item.name }}</div>
+                <div class="sc-item-price">₦{{ item.price }}</div>
+              </div>
+              <div class="sc-add-btn">+</div>
+            </div>
+            {% empty %}
+            <p style="color: #888; font-style: italic; font-size: 10px;" >No popular items available.</p>
+            {% endfor %}
+          </div>
+        </div>
+        <!-- Live location card -->
+        <div class="sc-loc-card">
+          <div class="sc-loc-icon">
+            <svg fill="none" height="14" viewbox="0 0 24 24" width="14">
+              <path
+                d="M12 2C8 2 4 5.5 4 10c0 6 8 12 8 12s8-6 8-12c0-4.5-4-8-8-8z"
+                fill="#1A7A1A"
+              ></path>
+              <circle cx="12" cy="10" fill="white" r="3"></circle>
+            </svg>
+          </div>
+          <div class="sc-loc-body">
+            <div class="sc-loc-label">Store Location</div>
+            <div class="sc-loc-addr" id="previewAddr">
+              Waiting for location…
+            </div>
+            <div class="sc-loc-city" id="previewCity">
+              Move the map or use GPS
+            </div>
+          </div>
+        </div>
+        <p class="preview-note">How customers will<br />discover your store</p>
+      </div>
+    </div>
+    <!-- /shell -->
+    <!-- ═══ TOUR OVERLAY (for future use) ═══════════════════ -->
+    <div id="tour-overlay">
+      <div id="tour-spotlight" class="tour-spotlight"></div>
+    </div>
+
+    <div id="tour-box">
+      <div id="tour-text"></div>
+
+      <div class="tour-footer">
+        <button class="tour-skip" id="tour-skip">Skip</button>
+
+        <div>
+          <span class="tour-step" id="tour-step"></span>
+          <button class="tour-btn" id="tour-prev">Back</button>
+          <button class="tour-btn" id="tour-next">Next</button>
+        </div>
+      </div>
+      <div class="tour-progress">
+        <div class="tour-progress-bar" id="tour-progress-bar"></div>
+      </div>
+    </div>
+    <script>
+      window.tourPausedAtStep3 = false;
+      /* ── DATA ── */
+      const LOCATIONS = [
+        {
+          addr: "12 Zik Avenue",
+          city: "Awka",
+          post: "420001",
+          landmark: "Near Zenith Bank Junction",
+          accuracy: 5,
+        },
+        {
+          addr: "4 Enugu Road",
+          city: "Onitsha",
+          post: "420110",
+          landmark: "By Upper Iweka Roundabout",
+          accuracy: 4,
+        },
+        {
+          addr: "15 Oguta Road",
+          city: "Onitsha",
+          post: "420110",
+          landmark: "Opposite Main Market Gate",
+          accuracy: 5,
+        },
+        {
+          addr: "7 Aroma Junction",
+          city: "Awka",
+          post: "420001",
+          landmark: "Near Total Filling Station",
+          accuracy: 4,
+        },
+        {
+          addr: "23 Nnewi Road",
+          city: "Nnewi",
+          post: "434101",
+          landmark: "Beside Nnewi Market",
+          accuracy: 3,
+        },
+        {
+          addr: "9 Ekwueme Square",
+          city: "Awka",
+          post: "420001",
+          landmark: "Near State Secretariat",
+          accuracy: 5,
+        },
+        {
+          addr: "3 Obosi Road, GRA",
+          city: "Onitsha",
+          post: "420110",
+          landmark: "Behind St. Charles College",
+          accuracy: 5,
+        },
+      ];
+      const SEARCH_DATA = [
+        {
+          name: "Chicken Republic Awka",
+          sub: "12 Zik Avenue, Awka",
+          loc: LOCATIONS[0],
+        },
+        {
+          name: "Zenith Bank Junction",
+          sub: "Zik Avenue, Awka",
+          loc: LOCATIONS[0],
+        },
+        {
+          name: "Upper Iweka Roundabout",
+          sub: "Enugu Road, Onitsha",
+          loc: LOCATIONS[1],
+        },
+        {
+          name: "Onitsha Main Market",
+          sub: "Oguta Road, Onitsha",
+          loc: LOCATIONS[2],
+        },
+        { name: "Aroma Junction", sub: "Aroma, Awka", loc: LOCATIONS[3] },
+        {
+          name: "Nnewi Motor Market",
+          sub: "Nnewi Road, Nnewi",
+          loc: LOCATIONS[4],
+        },
+        {
+          name: "Ekwueme Square",
+          sub: "Awka, Anambra State",
+          loc: LOCATIONS[5],
+        },
+      ];
+
+      /* ── STATE ── */
+      let currentLoc = null;
+      let locationConfirmed = false;
+      let mapOffsetX = 0,
+        mapOffsetY = 0;
+      let isDragging = false;
+      let startX = 0,
+        startY = 0;
+      let zoomLevel = 1;
+      let locIdx = 0;
+      let updateTimer = null;
+
+      /* ── PERSIST (SAVE LOCATION) ── */
+      function persistLocation(loc) {
+        if (!loc) return;
+
+        const payload = {
+          addr: loc.addr,
+          city: loc.city,
+          post: loc.post,
+          landmark: loc.landmark,
+          accuracy: loc.accuracy,
+        };
+
+        localStorage.setItem("restaurant_location", JSON.stringify(payload));
+      }
+
+      /* ── ELEMENTS ── */
+      const mapArea = document.getElementById("mapArea");
+      const mapTiles = document.getElementById("mapTiles");
+      const mapRoads = document.getElementById("mapRoads");
+      const centerPin = document.getElementById("centerPin");
+      const addressCard = document.getElementById("addressCard");
+      const acAddress = document.getElementById("acAddress");
+      const acLandmark = document.getElementById("acLandmark");
+      const accDots = document
+        .getElementById("accDots")
+        .querySelectorAll(".acc-dot");
+      const accLabel = document.getElementById("accLabel");
+      const confirmBtn = document.getElementById("confirmBtn");
+      const ctaStateText = document.getElementById("ctaStateText");
+      const detectOverlay = document.getElementById("detectOverlay");
+      const detectBtnText = document.getElementById("detectBtnText");
+      const searchInput = document.getElementById("searchInput");
+      const searchResults = document.getElementById("searchResults");
+
+      /* ── BUILD MAP VISUALS ── */
+      (function buildMap() {
+        const roads = mapRoads;
+        const horiz = [15, 30, 50, 65, 80];
+        const vert = [18, 35, 55, 72, 88];
+        horiz.forEach((p, i) => {
+          const r = document.createElement("div");
+          r.className = "road h" + (i === 2 ? " thick" : "");
+          r.style.top = p + "%";
+          roads.appendChild(r);
+        });
+        vert.forEach((p, i) => {
+          const r = document.createElement("div");
+          r.className = "road v" + (i === 2 ? " thick" : "");
+          r.style.left = p + "%";
+          roads.appendChild(r);
+        });
+        // buildings
+        const blocks = [
+          [5, 5, 12, 8],
+          [22, 3, 16, 9],
+          [48, 4, 10, 7],
+          [66, 8, 14, 11],
+          [4, 20, 18, 13],
+          [28, 22, 14, 9],
+          [52, 18, 12, 10],
+          [76, 24, 10, 15],
+          [8, 42, 20, 12],
+          [36, 40, 16, 14],
+          [60, 44, 18, 10],
+          [3, 60, 12, 16],
+          [22, 58, 20, 10],
+          [48, 62, 14, 12],
+          [70, 58, 16, 13],
+          [86, 45, 10, 18],
+        ];
+        blocks.forEach(([l, t, w, h]) => {
+          const b = document.createElement("div");
+          b.className = "mblk";
+          b.style.cssText = `left:${l}%;top:${t}%;width:${w}%;height:${h}%`;
+          roads.appendChild(b);
+        });
+        // park
+        const pk = document.createElement("div");
+        pk.className = "park";
+        pk.style.cssText = "left:38%;top:24%;width:10%;height:12%";
+        roads.appendChild(pk);
+      })();
+
+      /* ── MAP DRAG ── */
+      function applyTranslate(animate) {
+        const ease = animate ? "cubic-bezier(0.25,0.46,0.45,0.94)" : "none";
+        mapTiles.style.transition = animate ? `transform .4s ${ease}` : "none";
+        mapRoads.style.transition = animate ? `transform .4s ${ease}` : "none";
+        mapTiles.style.transform = `translate(${mapOffsetX}px, ${mapOffsetY}px) scale(${zoomLevel})`;
+        mapRoads.style.transform = `translate(${mapOffsetX}px, ${mapOffsetY}px) scale(${zoomLevel})`;
+      }
+
+      mapArea.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX - mapOffsetX;
+        startY = e.clientY - mapOffsetY;
+        centerPin.classList.add("lifting");
+        mapArea.style.cursor = "grabbing";
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        mapOffsetX = e.clientX - startX;
+        mapOffsetY = e.clientY - startY;
+        applyTranslate(false);
+      });
+      window.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        centerPin.classList.remove("lifting");
+        mapArea.style.cursor = "grab";
+        onMapMoved();
+      });
+
+      // Touch
+      mapArea.addEventListener(
+        "touchstart",
+        (e) => {
+          const t = e.touches[0];
+          isDragging = true;
+          startX = t.clientX - mapOffsetX;
+          startY = t.clientY - mapOffsetY;
+          centerPin.classList.add("lifting");
+        },
+        { passive: true },
+      );
+      mapArea.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!isDragging) return;
+          const t = e.touches[0];
+          mapOffsetX = t.clientX - startX;
+          mapOffsetY = t.clientY - startY;
+          applyTranslate(false);
+          e.preventDefault();
+        },
+        { passive: false },
+      );
+      mapArea.addEventListener("touchend", () => {
+        isDragging = false;
+        centerPin.classList.remove("lifting");
+        onMapMoved();
+      });
+
+      function unlockConfirmStep() {
+        const confirmBtn = document.getElementById("confirmBtn");
+        if (confirmBtn) {
+          confirmBtn.disabled = false;
+        }
+      }
+
+      function onMapMoved() {
+        clearTimeout(updateTimer);
+
+        updateTimer = setTimeout(() => {
+          locIdx = (locIdx + 1) % LOCATIONS.length;
+          setLocation(LOCATIONS[locIdx], "map");
+
+          unlockConfirmStep(); // restore this
+          syncTourWithState(); // keep this
+        }, 250);
+      }
+
+      /* ── SET LOCATION ── */
+      function setLocation(loc, source) {
+        currentLoc = loc;
+
+        // Update address card with flash
+        addressCard.classList.add("updating");
+        acAddress.style.opacity = "0";
+        setTimeout(() => {
+          acAddress.textContent = loc.addr + ", " + loc.city;
+          acLandmark.textContent = loc.landmark || "—";
+          acAddress.style.opacity = "1";
+          addressCard.classList.remove("updating");
+          addressCard.classList.add("updating");
+          setTimeout(() => addressCard.classList.remove("updating"), 1200);
+        }, 100);
+
+        // Accuracy
+        const dots = Array.from(accDots);
+        dots.forEach((d, i) => {
+          d.classList.toggle("on", i < loc.accuracy);
+        });
+        const labels = ["Low", "Low", "Fair", "Good", "High", "High"];
+        accLabel.textContent = labels[loc.accuracy] || "High";
+
+        // Manual fields
+        document.getElementById("addr-input").value = loc.addr;
+        document.getElementById("city-input").value = loc.city;
+        document.getElementById("postcode-input").value = loc.post;
+        document.getElementById("landmark-input").value = loc.landmark || "";
+
+        // Hidden form fields
+        document.getElementById("form-address").value = loc.addr;
+        document.getElementById("form-city").value = loc.city;
+        document.getElementById("form-postcode").value = loc.post;
+        document.getElementById("form-landmark").value = loc.landmark || "";
+
+        // Enable confirm
+        confirmBtn.disabled = false;
+        ctaStateText.textContent = "Location ready to confirm";
+
+        // ── Update live preview panel ──
+        const previewAddr = document.getElementById("previewAddr");
+        const previewCity = document.getElementById("previewCity");
+        const scAddrText = document.getElementById("scAddrText");
+        if (previewAddr) {
+          previewAddr.classList.add("flash");
+          setTimeout(() => {
+            previewAddr.textContent = loc.addr;
+            previewCity.textContent =
+              loc.city + (loc.post ? " · " + loc.post : "");
+            scAddrText.textContent = loc.addr + ", " + loc.city;
+            previewAddr.classList.remove("flash");
+          }, 200);
+        }
+        persistLocation(loc);
+        setTimeout(() => {
+          syncTourWithState();
+        }, 50);
+      }
+
+      /* ── DETECT LOCATION (Real GPS + Nominatim) ── */
+      function detectLocation() {
+        if (!navigator.geolocation) {
+          showGeoError("Your browser does not support location access.");
+          return;
+        }
+
+        detectBtnText.textContent = "Detecting…";
+        detectOverlay.classList.add("show");
+        document.querySelector(".det-text").textContent =
+          "Finding your location";
+        document.querySelector(".det-sub").textContent = "Requesting GPS…";
+
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude, accuracy } = position.coords;
+
+            document.querySelector(".det-text").textContent = "Got your GPS";
+            document.querySelector(".det-sub").textContent =
+              "Looking up address…";
+
+            try {
+              const res = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
+                {
+                  headers: {
+                    "Accept-Language": "en",
+                    "User-Agent": "VendoraEats/1.0",
+                  },
+                },
+              );
+              if (!res.ok) throw new Error("Nominatim error");
+              const data = await res.json();
+              const a = data.address || {};
+
+              // Build address parts from OSM response
+              const road =
+                a.road || a.pedestrian || a.footway || a.street || "";
+              const houseNum = a.house_number || "";
+              const suburb = a.suburb || a.neighbourhood || a.hamlet || "";
+              const city = a.city || a.town || a.village || a.county || "";
+              const postcode = a.postcode || "";
+              const state = a.state || "";
+
+              const streetAddr =
+                [houseNum, road].filter(Boolean).join(" ") ||
+                suburb ||
+                "Unknown Street";
+              const cityVal = city || state || "Unknown City";
+              const landmark =
+                suburb && suburb !== streetAddr ? suburb : state ? state : "";
+
+              // Accuracy dots: map GPS accuracy (metres) to 1-5 scale
+              const accScore =
+                accuracy <= 20
+                  ? 5
+                  : accuracy <= 50
+                    ? 4
+                    : accuracy <= 100
+                      ? 3
+                      : accuracy <= 200
+                        ? 2
+                        : 1;
+
+              const realLoc = {
+                addr: streetAddr,
+                city: cityVal,
+                post: postcode,
+                landmark: landmark,
+                accuracy: accScore,
+              };
+
+              detectOverlay.classList.remove("show");
+              detectBtnText.textContent = "Use my current location";
+              mapOffsetX = 0;
+              mapOffsetY = 0;
+              applyTranslate(true);
+              setLocation(realLoc, "detect");
+
+              // Open manual fields so user can review/edit
+              const fields = document.getElementById("manualFields");
+              const toggle = document.getElementById("manualToggle");
+              if (!fields.classList.contains("open")) {
+                fields.classList.add("open");
+                toggle.classList.add("open");
+              }
+            } catch (err) {
+              showGeoError(
+                "Could not look up your address. Please enter it manually.",
+              );
+            }
+          },
+          (err) => {
+            let msg = "Location access denied.";
+            if (err.code === 1)
+              msg =
+                "Location permission denied. Please allow access and try again.";
+            else if (err.code === 2)
+              msg = "Location unavailable. Check your GPS signal.";
+            else if (err.code === 3)
+              msg = "Location request timed out. Try again.";
+            showGeoError(msg);
+          },
+          { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 },
+        );
+      }
+
+      function showGeoError(msg) {
+        detectOverlay.classList.remove("show");
+        detectBtnText.textContent = "Use my current location";
+        // Show inline error under the button
+        let errEl = document.getElementById("geoError");
+        if (!errEl) {
+          errEl = document.createElement("div");
+          errEl.id = "geoError";
+          errEl.style.cssText =
+            "font-size:12px;color:#c0392b;background:#fdf0ef;border:1px solid #f5c6c2;border-radius:8px;padding:8px 12px;margin-top:-4px;";
+          document
+            .getElementById("detectBtn")
+            .insertAdjacentElement("afterend", errEl);
+        }
+        errEl.textContent = "⚠ " + msg;
+        setTimeout(() => errEl && errEl.remove(), 6000);
+      }
+
+      /* ── ZOOM ── */
+      function zoomMap(dir) {
+        zoomLevel = Math.max(0.85, Math.min(1.8, zoomLevel + dir * 0.15));
+        applyTranslate(true);
+      }
+
+      /* ── SEARCH ── */
+      searchInput.addEventListener("input", function () {
+        const q = this.value.trim().toLowerCase();
+        if (!q) {
+          searchResults.classList.remove("open");
+          return;
+        }
+        const matches = SEARCH_DATA.filter(
+          (d) =>
+            d.name.toLowerCase().includes(q) || d.sub.toLowerCase().includes(q),
+        );
+        if (!matches.length) {
+          searchResults.classList.remove("open");
+          return;
+        }
+        searchResults.innerHTML = matches
+          .map(
+            (m, i) => `
+    <div class="search-result-item" onclick="selectSearch(${i})">
+      <div class="sri-icon">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
+          <path d="M12 2C8 2 4 5.5 4 10c0 6 8 12 8 12s8-6 8-12c0-4.5-4-8-8-8z" fill="#1A7A1A"/>
+        </svg>
+      </div>
+      <div class="sri-text">
+        <strong>${m.name}</strong>
+        <span>${m.sub}</span>
+      </div>
+    </div>
+  `,
+          )
+          .join("");
+        searchResults._matches = matches;
+        searchResults.classList.add("open");
+      });
+
+      function selectSearch(idx) {
+        const m = searchResults._matches[idx];
+        searchInput.value = m.name;
+        searchResults.classList.remove("open");
+        // Animate map to simulate moving
+        mapOffsetX = (Math.random() - 0.5) * 80;
+        mapOffsetY = (Math.random() - 0.5) * 60;
+        applyTranslate(true);
+        setTimeout(() => {
+          mapOffsetX = 0;
+          mapOffsetY = 0;
+          applyTranslate(true);
+        }, 350);
+        setLocation(m.loc, "search");
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!document.getElementById("searchWrap").contains(e.target)) {
+          searchResults.classList.remove("open");
+        }
+      });
+
+      /* ── MANUAL TOGGLE ── */
+      function toggleManual() {
+        const toggle = document.getElementById("manualToggle");
+        const fields = document.getElementById("manualFields");
+        toggle.classList.toggle("open");
+        fields.classList.toggle("open");
+      }
+
+      /* ── SAVE MANUAL INPUT CHANGES ── */
+      ["addr-input", "city-input", "postcode-input", "landmark-input"].forEach(
+        (id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+
+          el.addEventListener("input", () => {
+            const loc = {
+              addr: document.getElementById("addr-input").value,
+              city: document.getElementById("city-input").value,
+              post: document.getElementById("postcode-input").value,
+              landmark: document.getElementById("landmark-input").value,
+              accuracy: currentLoc?.accuracy || 3,
+            };
+
+            currentLoc = loc; // 👈 IMPORTANT
+            persistLocation(loc);
+            validateManualInput(); // 👈 THIS is the fix
+          });
+        },
+      );
+
+      function validateManualInput() {
+        const addr = document.getElementById("addr-input").value.trim();
+        const city = document.getElementById("city-input").value.trim();
+        const state = document.getElementById("postcode-input").value.trim();
+
+        if (addr && city && state) {
+          confirmBtn.disabled = false;
+          ctaStateText.textContent = "Manual location ready to confirm";
+
+          // also update preview (important)
+          const previewAddr = document.getElementById("previewAddr");
+          const previewCity = document.getElementById("previewCity");
+          const scAddrText = document.getElementById("scAddrText");
+
+          if (previewAddr) {
+            previewAddr.textContent = addr;
+            previewCity.textContent = city + " · " + state;
+            scAddrText.textContent = addr + ", " + city;
+          }
+        } else {
+          confirmBtn.disabled = true;
+          ctaStateText.textContent = "Please complete your address";
+        }
+        syncTourWithState();
+      }
+
+      /* ── FORM SUBMIT ── */
+      document
+        .getElementById("locationForm")
+        .addEventListener("submit", function (e) {
+          // Sync manual fields to hidden inputs before submit
+          const a = document.getElementById("addr-input").value;
+          const c = document.getElementById("city-input").value;
+          const p = document.getElementById("postcode-input").value;
+          const l = document.getElementById("landmark-input").value;
+          if (!a || !c || !p) {
+            e.preventDefault();
+            alert("Please fill in all required fields.");
+            return;
+          }
+          document.getElementById("form-address").value = a;
+          document.getElementById("form-city").value = c;
+          document.getElementById("form-postcode").value = p;
+          document.getElementById("form-landmark").value = l;
+        });
+
+      /* ── INIT ── */
+      applyTranslate(false);
+    </script>
+    <div id="location-feedback" style="margin-top: 10px; font-size: 13px">
+      <div id="accuracy-status" style="margin-bottom: 4px">
+        ⚠️ Checking location accuracy...
+      </div>
+      <div style="color: gray; font-size: 12px">
+        This is the location customers will use to find you.
+      </div>
+    </div>
+    <script>
+      let idleTimer;
+      function startIdleTimer() {
+        idleTimer = setTimeout(() => {
+          const hint = document.getElementById("map-hint");
+          if (hint) {
+            hint.innerText = "Tip: Drag the map to adjust your location";
+          }
+        }, 5000);
+      }
+      document.addEventListener("mousemove", () => {
+        clearTimeout(idleTimer);
+        startIdleTimer();
+      });
+      startIdleTimer();
+
+      function setAccurateState() {
+        document.getElementById("accuracy-status").innerHTML =
+          "✅ This location looks accurate";
+        document.getElementById("done-state").style.display = "block";
+      }
+
+      function setInaccurateState() {
+        document.getElementById("accuracy-status").innerHTML =
+          "⚠️ This may not be precise — adjust the map";
+        document.getElementById("done-state").style.display = "none";
+      }
+    </script>
+    {% comment %}
+    <div
+      id="tour-overlay"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        display: none;
+      "
+    ></div>
+    <div
+      id="tour-box"
+      style="
+        position: fixed;
+        width: 260px;
+        background: #fff;
+        padding: 12px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+        display: none;
+        font-size: 13px;
+      "
+    >
+      <div id="tour-text"></div>
+      <div style="margin-top: 10px; text-align: right">
+        <button id="tour-next" style="padding: 6px 10px">Next</button>
+      </div>
+    </div>
+    {% endcomment %}
+    <script>
+      let currentStep = 0;
+      let currentEl = null;
+
+      const steps = [
+        {
+          el: "#detectBtn",
+          text: "Automatically detect your restaurant location.",
+        },
+        { el: "#searchInput", text: "Search your address or landmark here." },
+        {
+          el: "#mapArea",
+          text: "Drag the map to fine-tune your exact position.",
+        },
+        {
+          el: "#confirmBtn",
+          text: "Click confirm once everything looks correct.",
+        },
+      ].filter((s) => document.querySelector(s.el));
+
+      const overlay = document.getElementById("tour-overlay");
+      const spotlight = document.getElementById("tour-spotlight");
+      const box = document.getElementById("tour-box");
+      const text = document.getElementById("tour-text");
+      const nextBtn = document.getElementById("tour-next");
+      const prevBtn = document.getElementById("tour-prev");
+      const skipBtn = document.getElementById("tour-skip");
+      const stepIndicator = document.getElementById("tour-step");
+
+      function positionBox(rect) {
+        const padding = 12;
+        const boxRect = box.getBoundingClientRect();
+
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        const spaceRight = window.innerWidth - rect.right;
+        const spaceLeft = rect.left;
+
+        // Default → BELOW
+        let top = rect.bottom + padding;
+        let left = rect.left;
+
+        // If not enough space below → try ABOVE
+        if (spaceBelow < boxRect.height + 20 && spaceAbove > boxRect.height) {
+          top = rect.top - boxRect.height - padding;
+        }
+
+        // If still bad → try RIGHT
+        if (
+          spaceBelow < boxRect.height &&
+          spaceAbove < boxRect.height &&
+          spaceRight > boxRect.width
+        ) {
+          top = rect.top;
+          left = rect.right + padding;
+        }
+
+        // If no right → LEFT
+        if (spaceRight < boxRect.width && spaceLeft > boxRect.width) {
+          top = rect.top;
+          left = rect.left - boxRect.width - padding;
+        }
+
+        // Prevent overflow (important)
+        if (left + boxRect.width > window.innerWidth) {
+          left = window.innerWidth - boxRect.width - 10;
+        }
+
+        if (left < 10) left = 10;
+
+        if (top + boxRect.height > window.innerHeight) {
+          top = window.innerHeight - boxRect.height - 10;
+        }
+
+        if (top < 10) top = 10;
+
+        box.style.top = top + "px";
+        box.style.left = left + "px";
+        setTimeout(() => {
+          box.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        }, 100);
+      }
+
+      function showStep(i) {
+        if (!steps[i]) {
+          endTour();
+          return;
+        }
+
+        if (currentEl) currentEl.classList.remove("tour-highlight");
+
+        const step = steps[i];
+        const el = document.querySelector(step.el);
+
+        if (!el) return;
+
+        currentEl = el;
+        el.classList.add("tour-highlight");
+
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        // ✅ WAIT for scroll + layout
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            const rect = el.getBoundingClientRect();
+
+            // ✅ spotlight positioning
+            spotlight.style.top = rect.top + "px";
+            spotlight.style.left = rect.left + "px";
+            spotlight.style.width = rect.width + "px";
+            spotlight.style.height = rect.height + "px";
+
+            // ✅ ALSO move tooltip HERE (not outside)
+            positionBox(rect);
+          });
+        }, 350);
+
+        // UI updates (safe outside)
+        text.innerText = step.text;
+        stepIndicator.innerText = `${i + 1} / ${steps.length}`;
+        document.getElementById("tour-progress-bar").style.width =
+          ((i + 1) / steps.length) * 100 + "%";
+
+        overlay.style.display = "block";
+        box.style.display = "block";
+
+        nextBtn.innerText = i === steps.length - 1 ? "Finish" : "Next";
+
+        // ✅ Scroll footer for confirm step
+        if (step.el === "#confirmBtn") {
+          document.querySelector(".panel-footer")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }
+
+      function nextStep() {
+        // 🚫 BLOCK going to step 4 if location not valid
+        if (currentStep === 2) {
+          const confirmBtn = document.getElementById("confirmBtn");
+
+          if (confirmBtn.disabled) {
+            // 👉 Hide tour instead of going forward
+            hideTourUntilReady();
+            return;
+          }
+        }
+
+        // ✅ Normal flow
+        if (currentStep === steps.length - 1) {
+          endTour();
+          return;
+        }
+
+        currentStep++;
+        showStep(currentStep);
+      }
+
+      function hideTourUntilReady() {
+        overlay.style.display = "none";
+        box.style.display = "none";
+
+        if (currentEl) currentEl.classList.remove("tour-highlight");
+
+        // mark paused state
+        window.tourPausedAtStep3 = true;
+      }
+
+      function syncTourWithState() {
+        const confirmBtn = document.getElementById("confirmBtn");
+        if (!confirmBtn) return;
+
+        // ✅ ONLY resume if:
+        // - user already reached step 3
+        // - tour is paused
+        // - location is now valid
+        if (
+          !confirmBtn.disabled &&
+          window.tourPausedAtStep3 &&
+          currentStep === 2
+        ) {
+          window.tourPausedAtStep3 = false;
+          currentStep = 3;
+
+          // 👇 Show ONLY step 4 now
+          showStep(3);
+        }
+      }
+
+      const input = document.querySelector("#addr-input");
+
+      if (input) {
+        input.addEventListener("input", () => {
+          if (input.value.trim().length > 3) {
+            unlockConfirmStep();
+          }
+        });
+      }
+
+      //
+
+      function prevStep() {
+        if (currentStep === 0) return;
+        currentStep--;
+        showStep(currentStep);
+      }
+
+      function endTour() {
+        overlay.style.display = "none";
+        box.style.display = "none";
+        if (currentEl) currentEl.classList.remove("tour-highlight");
+
+        localStorage.setItem("locationTourDone", "true");
+      }
+
+      /* EVENTS */
+      if (nextBtn) nextBtn.onclick = nextStep;
+      if (prevBtn) prevBtn.onclick = prevStep;
+      if (skipBtn) skipBtn.onclick = endTour;
+
+      /* Auto advance */
+
+      /* Start */
+      window.addEventListener("load", () => {
+        if (localStorage.getItem("locationTourDone")) return;
+
+        setTimeout(() => {
+          showStep(0);
+          document.querySelector(steps[0].el)?.focus();
+        }, 700);
+      });
+    </script>
+  </body>
+</html>

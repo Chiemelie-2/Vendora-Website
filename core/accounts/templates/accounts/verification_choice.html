@@ -1,0 +1,54 @@
+
+{% load static %}
+{%  include 'accounts/account_nav.html' %}
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card" style="max-width: 450px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 class="auth-title">Verify your identity</h1>
+            <p class="auth-subtitle">Choose how you'd like to receive your security code to finish setting up your business.</p>
+        </div>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <!-- EMAIL OPTION -->
+            <button type="submit" name="choice" value="email" class="choice-button">
+                <div class="choice-icon">✉️</div>
+                <div class="choice-text">
+                    <span class="choice-label">Email</span>
+                    <span class="choice-sub">{{ data.email }}</span>
+                </div>
+                <span class="chevron">❯</span>
+            </button>
+
+            <!-- PHONE OPTION -->
+            <button type="submit" name="choice" value="phone" class="choice-button" style="margin-top: 15px;">
+                <div class="choice-icon">📱</div>
+                <div class="choice-text">
+                    <span class="choice-label">Phone Number</span>
+                    <span class="choice-sub">{{ data.phone }}</span>
+                </div>
+                <span class="chevron">❯</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Need help? <a href="#">Contact Support</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .choice-button {
+        display: flex; align-items: center; width: 100%; padding: 20px;
+        background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px;
+        cursor: pointer; transition: all 0.2s; text-align: left;
+    }
+    .choice-button:hover { background: #f1f3f5; border-color: #dee2e6; }
+    .choice-icon { font-size: 24px; margin-right: 15px; }
+    .choice-text { flex-grow: 1; display: flex; flex-direction: column; }
+    .choice-label { font-weight: 600; color: #212529; font-size: 16px; }
+    .choice-sub { color: #6c757d; font-size: 14px; margin-top: 2px; }
+</style>
+{% endblock %}

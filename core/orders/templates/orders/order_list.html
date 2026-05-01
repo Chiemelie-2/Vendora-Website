@@ -1,0 +1,25 @@
+<!-- orders/templates/orders/list.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="container" style="padding: 20px;">
+    <h1>My Order History</h1>
+    
+    {% for order in orders %}
+    <div class="order-card" style="background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <div style="display: flex; justify-content: space-between;">
+            <strong>Order #{{ order.id }}</strong>
+            <span style="color: #666;">{{ order.created|date:"M d, Y" }}</span>
+        </div>
+        <hr>
+        {% for item in order.items.all %}
+            <p>{{ item.quantity }}x {{ item.product.name }} - ${{ item.price }}</p>
+        {% endfor %}
+        <div style="text-align: right; font-weight: bold; font-size: 1.2rem;">
+            Total: ${{ order.total_paid }}
+        </div>
+    </div>
+    {% empty %}
+        <p>You haven't ordered anything yet! <a href="{% url 'restaurants:home' %}">Order now</a></p>
+    {% endfor %}
+</div>

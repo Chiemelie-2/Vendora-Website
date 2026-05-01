@@ -1,0 +1,24 @@
+<!-- orders/templates/orders/create.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}">
+
+<div class="auth-card" style="margin-top: 50px;">
+    <h1>Checkout</h1>
+    <p>Where should we deliver your food?</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            <label>Delivery Address</label>
+            <input type="text" name="address" placeholder="123 Main St, Lagos" required style="width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #ddd;">
+        </div>
+
+        <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+            <h3>Total to pay: ${{ cart.get_total_price }}</h3>
+        </div>
+
+        <button type="submit" class="btn-get-started" style="width: 100%; border: none; cursor: pointer;">
+            Place Order
+        </button>
+    </form>
+</div>

@@ -1,0 +1,15 @@
+{% for product in products %}
+  <div class="product-card">
+    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    <h3>{{ product.name }}</h3>
+    <p>₦{{ product.price }}</p>
+    
+    <!-- DELETE FORM -->
+    <form action="{% url 'vendor_dashboard:delete_product' product.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this dish?');">
+      {% csrf_token %}
+      <button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+        Delete
+      </button>
+    </form>
+  </div>
+{% endfor %}

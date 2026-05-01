@@ -1,0 +1,72 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+<link rel="stylesheet" href="{% static 'css/phone_edit.css' %}" />
+
+<div class="account-container">
+  <!-- SIDEBAR -->
+  <aside class="account-sidebar">
+    <nav>
+      <a href="{% url 'accounts:manage_account' %}">Home</a>
+      <a href="{% url 'accounts:personal_info' %}" class="active">Personal info</a>
+      <a href="#">Security</a>
+      <a href="#">Privacy &amp; Data</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="phone-edit-main">
+    <h1 class="phone-edit-title">Phone number</h1>
+    <p class="phone-edit-subtitle">
+      You'll use this number to get notifications, sign in, and recover your account.
+    </p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p class="phone-edit-error">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:edit_phone' %}" id="phone-edit-form">
+      {% csrf_token %}
+
+      <label class="phone-field-label" for="id_phone_input">Phone number</label>
+
+      <div class="phone-input-row">
+        <!-- Country code selector -->
+        <div class="country-select-wrapper">
+          <select id="id_country_code" name="country_code" class="country-select">
+            <option value="+234"   data-flag="NG" selected>NG</option>
+          </select>
+        </div>
+
+        <!-- Phone number input with prefix -->
+        <div class="phone-number-wrapper">
+          <span class="dial-prefix" id="dial-prefix">+234</span>
+          <input
+            type="tel"
+            id="id_phone_input"
+            name="phone_number"
+            class="phone-number-input"
+            placeholder=""
+            autocomplete="tel"
+            inputmode="tel"
+            value="{{ current_phone|default:'' }}"
+          >
+        </div>
+      </div>
+
+      <p class="phone-hint">A verification code will be sent to this number</p>
+
+      <button type="submit" class="btn-phone-update">Update</button>
+    </form>
+  </main>
+</div>
+
+<script>
+  // Keep the dial prefix in sync with the country selector
+  const select = document.getElementById('id_country_code');
+  const prefix = document.getElementById('dial-prefix');
+  select.addEventListener('change', function () {
+    prefix.textContent = this.value;
+  });
+</script>

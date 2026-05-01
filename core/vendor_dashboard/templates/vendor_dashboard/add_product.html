@@ -1,0 +1,32 @@
+
+{% load static %}
+{% include 'vendor_dashboard/account_nav.html' %}
+<!-- Link to your CSS -->
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}" />
+
+<div class="add-product-page" style="background-image: url('{{ dashboard_settings.background_image.url }}'); background-size: cover; min-height: 100vh; padding: 50px 0;">
+    <div class="auth-card" style="margin: 0 auto; background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 12px; max-width: 500px;">
+        <h1>Add New Dish</h1>
+        <p>Upload a delicious meal to your menu for <strong>{{ restaurant.name }}</strong>.</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p style="color: red; font-size: 0.8rem;">{{ field.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-get-started" style="width: 100%; padding: 12px; background: #34d399; border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                List Product
+            </button>
+        </form>
+        <br />
+        <a href="{% url 'vendor_dashboard:dashboard' %}" style="color: #666; text-decoration: none">← Back to Dashboard</a>
+    </div>
+</div>

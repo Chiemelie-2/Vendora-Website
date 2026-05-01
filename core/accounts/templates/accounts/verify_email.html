@@ -1,0 +1,29 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <img src="{% static 'images/brand-logo.png' %}" alt="Logo" style="height: 40px;" />
+        <h2 style="font-weight: b; color: #1A1A1A;">Get Started</h2>
+        <h1 class="auth-title">Verify your email</h1>
+        <p class="auth-subtitle">We sent a 6-digit code to <strong>{{ email }}</strong></p>
+
+        {% if messages %}
+            {% for message in messages %}<p style="color: red;">{{ message }}</p>{% endfor %}
+        {% endif %}
+
+        <form method="POST" class="auth-form" action="{% url 'accounts:verify_registration_email' vendor.id %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="otp_code" placeholder="0 0 0 0 0 0" 
+                       style="text-align: center; letter-spacing: 10px; font-size: 24px; padding: 15px; border-radius: 8px; border: 1px solid #dadce0; width: 100%;">
+            </div>
+            
+            <button type="submit" class="btn-primary" style="background: black; color: white; width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer;">
+                Verify Email
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

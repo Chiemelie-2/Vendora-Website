@@ -1,0 +1,110 @@
+<!-- home.html -->
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Food Marketplace</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <header class="header">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div class="tabs">
+          <button class="active">Delivery</button>
+          <button>Pickup</button>
+          <button>Dine-in</button>
+        </div>
+        <a href="{% url 'cart:cart_detail' %}" class="cart-icon"> 🛒 Basket </a>
+      </div>
+    </header>
+
+    <!-- restaurants/templates/restaurants/home.html -->
+    <div
+      class="category-wrapper"
+      style="
+        padding: 15px;
+        background: #fff;
+        position: sticky;
+        top: 70px;
+        z-index: 90;
+      "
+    >
+      <div
+        class="category-scroll"
+        style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px"
+      >
+        <!-- "All" button to reset filter -->
+        <a
+          href="{% url 'restaurants:home' %}"
+          class="category-item"
+          style="text-decoration: none; text-align: center; min-width: 70px"
+        >
+          <div
+            style="
+              background: #f3f3f3;
+              width: 60px;
+              height: 60px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 5px;
+            "
+          >
+            🍽️
+          </div>
+          <span style="font-size: 0.8rem; color: #333">All</span>
+        </a>
+
+        {% for cat in categories %}
+        <a
+          href="?category={{ cat.id }}"
+          class="category-item"
+          style="text-decoration: none; text-align: center; min-width: 70px"
+        >
+          <div
+            style="
+              background: #f3f3f3;
+              width: 60px;
+              height: 60px;
+              border-radius: 50%;
+              overflow: hidden;
+              margin: 0 auto 5px;
+            "
+          >
+            {% if cat.image %}
+            <img
+              src="{{ cat.image.url }}"
+              style="width: 100%; height: 100%; object-fit: cover"
+            />
+            {% else %}
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+              "
+            >
+              🍲
+            </div>
+            {% endif %}
+          </div>
+          <span style="font-size: 0.8rem; color: #333">{{ cat.name }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="restaurant-list" id="restaurantList">
+      {% include 'partials/restaurant_list.html' %}
+    </div>
+  </body>
+</html>

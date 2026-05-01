@@ -1,0 +1,21 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}">
+
+<div class="account-settings-container">
+    <main class="main-content" style="margin: 0 auto; text-align: center; max-width: 500px;">
+        <h1 class="personal-info-header">Verify {{ type }}</h1>
+        <p>We sent a code to <strong>{{ value }}</strong></p>
+
+        {% if messages %}
+            {% for message in messages %}<p style="color: red;">{{ message }}</p>{% endfor %}
+        {% endif %}
+
+        <form method="post" style="margin-top: 30px;">
+            {% csrf_token %}
+            <input type="text" name="otp_code" placeholder="Enter 6-digit code" class="editable-input" style="text-align: center; border: 1px solid #ddd; padding: 15px; font-size: 20px; border-radius: 8px;">
+            <br>
+            <button type="submit" class="save-action-btn">Verify & Update</button>
+        </form>
+    </main>
+</div>
+

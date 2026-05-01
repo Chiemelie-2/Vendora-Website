@@ -1,0 +1,29 @@
+<!-- restaurants/templates/restaurants/detail.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+<div class="menu-container">
+  <div class="restaurant-hero">
+    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" />
+    <h1>{{ restaurant.name }}</h1>
+    <p>{{ restaurant.description }}</p>
+  </div>
+
+  <div class="items-list">
+    {% for item in menu_items %}
+    <div class="menu-item-row">
+      <div class="item-info">
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.description }}</p>
+        <span class="price">${{ item.price }}</span>
+      </div>
+      
+      <div class="item-action">
+        <img src="{{ item.image.url }}" class="thumb" />
+        <!-- Link to add the item to cart -->
+        <a href="{% url 'cart:cart_add' item.id %}" class="add-btn">+</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

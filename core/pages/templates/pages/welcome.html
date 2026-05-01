@@ -1,0 +1,170 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Eats - Order Food Delivery</title>
+    <!-- External Google Fonts -->
+    <link href="https://googleapis.com" rel="stylesheet" />
+    <!-- Your existing onboarding CSS -->
+    <link rel="stylesheet" href="{% static 'css/onboarding.css' %}" />
+    <!-- New Sidebar/Hero CSS -->
+    <link rel="stylesheet" href="{% static 'css/welcome.css' %}" />
+  </head>
+  <body>
+    <!-- SIDEBAR OVERLAY (The dark background when menu is open) -->
+    <div id="sidebar-overlay" onclick="toggleMenu()"></div>
+
+    <!-- SIDEBAR MENU (Hidden by default) -->
+    <div id="side-menu" class="side-menu">
+      <div class="side-menu-content">
+        {% if user.is_authenticated %}
+        <!-- USER PROFILE HEADER -->
+        <div class="user-profile-header">
+          <div class="user-avatar">👤</div>
+          <div class="user-info">
+            <span class="user-name">{{ user.username|title }}</span>
+            <a href="{% url 'accounts:manage_account' %}" class="manage-link">Manage account</a>
+          </div>
+        </div>
+
+        <!-- MAIN NAVIGATION LINKS -->
+        <div class="side-nav-links">
+          <a href="{% url 'orders:order_list' %}"
+            ><span class="nav-icon">🎫</span> Orders</a
+          >
+          <a href="#"><span class="nav-icon">👛 </span> Wallet</a>
+          <a href="#"><span class="nav-icon">❓</span> Help</a>
+          <a href="#"><span class="nav-icon">🏷️</span> Promotions</a>
+          <a href="#"><span class="nav-icon">👥</span> Invite friends</a>
+          <a href="{% url 'accounts:logout' %}" class="sign-out-link"
+            >Sign out</a
+          >
+        </div>
+
+        <hr class="side-divider" />
+
+        <!-- MERCHANT SECTION -->
+        <div class="side-nav-links">
+          <!-- As requested: No "Create business account" or "Sign up to deliver" -->
+          {% if user.profile.role == 'customer' %}
+          <a href="{% url 'vendor_onboarding:vendor_register' %}"
+            >Add your restaurant</a
+          >
+          {% endif %}
+        </div>
+
+        {% else %}
+        <!-- LOGGED OUT VIEW -->
+        <div class="side-auth">
+          <a href="{% url 'accounts:signup' %}" class="btn-side-black"
+            >Sign up</a
+          >
+          <a href="{% url 'accounts:login' %}" class="btn-side-white">Log in</a>
+        </div>
+        <div class="side-nav-links">
+          <a href="{% url 'vendor_onboarding:vendor_register' %}"
+            >Add your restaurant</a
+          >
+        </div>
+        {% endif %}
+
+        <!-- APP PROMO FOOTER -->
+        {% comment %} <div class="side-footer">
+          <div class="app-promo">
+            <div class="uber-eats-sq">Uber <span>Eats</span></div>
+            <p>There's more to love in the app.</p>
+          </div>
+          <div class="app-btns">
+            <button class="app-store-btn"> iPhone</button>
+            <button class="app-store-btn">🤖 Android</button>
+          </div>
+        </div> {% endcomment %}
+      </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <nav class="uber-nav">
+      <div class="nav-left">
+        <button class="menu-btn" onclick="toggleMenu()">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        </button>
+        <a href="/" class="logo">Vendor </a>
+      </div>
+
+      <div class="nav-right">
+        {% if user.is_authenticated %} {% if user.profile.role == 'customer' %}
+        <a href="{% url 'vendor_onboarding:vendor_register' %}" class="nav-link"
+          >Become a partner</a
+        >
+        {% endif %}
+        <a href="{% url 'accounts:logout' %}" class="nav-link login-btn"
+          >Log out</a
+        >
+        {% else %}
+        <a href="{% url 'vendor_onboarding:vendor_register' %}" class="nav-link"
+          >Become a partner</a
+        >
+        <a href="{% url 'accounts:login' %}" class="nav-link login-btn"
+          >Log in</a
+        >
+        <a href="{% url 'accounts:signup' %}" class="signup-btn">Sign up</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <!-- HERO CONTENT -->
+    <div
+      class="hero-section"
+      style="background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('{{ content.hero_image.url }}') no-repeat center center/cover;"
+    >
+      <h1 class="hero-title">
+        {{ content.title|default:"Order delivery near you" }}
+      </h1>
+
+      <div class="search-container">
+        <div class="search-group address-box">
+          <span class="icon">📍</span>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Enter delivery address"
+          />
+        </div>
+
+        <div class="search-group time-box">
+          <span class="icon">🕒</span>
+          <select
+            class="search-input"
+            style="background: transparent; cursor: pointer"
+          >
+            <option>Deliver now</option>
+            <option>Schedule for later</option>
+          </select>
+        </div>
+
+        <button class="btn-search">Search here</button>
+      </div>
+
+      <p class="sign-in-text">
+        {% if not user.is_authenticated %}
+        <a href="{% url 'accounts:login' %}">Sign in</a> for your recent
+        addresses {% endif %}
+      </p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/welcome.js' %}"></script>
+  </body>
+</html>

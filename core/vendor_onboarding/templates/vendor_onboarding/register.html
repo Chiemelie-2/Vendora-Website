@@ -1,0 +1,472 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Info - Vendora Eats</title>
+    <link rel="stylesheet" href="{% static 'css/vendor_onboarding.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sb-logo">
+            <div class="sb-logo-icon">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" style="height:16px;width:auto;">
+            </div>
+            <span class="sb-logo-name">Vendora <span class="sb-logo-eats">Eats</span></span>
+        </div>
+        <div class="steps">
+            <div class="step active">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="step-label">Business info</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-dot">2</div>
+                <div class="step-label">Location</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-dot">3</div>
+                <div class="step-label">Store setup</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-dot">4</div>
+                <div class="step-label">Menu</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-dot">5</div>
+                <div class="step-label">Review & submit</div>
+            </div>
+        </div>
+        <p class="sb-footer">© 2026 Vendora Eats</p>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+        <div class="main-header">
+            <h1>Tell us about your store</h1>
+            <p>This helps customers find and trust your business faster.
+                Already a partner? <a href="{% url 'accounts:login' %}">Log in →</a>
+            </p>
+        </div>
+
+        <div class="main-body">
+
+            <!-- ── FORM COLUMN ── -->
+            <div class="form-col">
+
+                {% if messages %}
+                    {% for msg in messages %}
+                    <div class="msg msg-{{ msg.tags }}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        {{ msg }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST"
+                    action="{% url 'vendor_onboarding:register_business' %}{% if is_edit %}?edit=true{% endif %}"
+                    enctype="multipart/form-data"
+                    id="vendorForm" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Store Identity -->
+                    <div class="form-section-label">Store identity</div>
+                    <div class="frow">
+                        <div class="fg">
+                            <label>Business name <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                    <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                </svg>
+                                <input type="text"
+                                    class="has-icon"
+                                    name="name"
+                                    id="f-biz"
+                                    placeholder="e.g. Mama's Kitchen"
+                                    value="{% if restaurant %}{{ restaurant.name }}{% endif %}"
+                                    autocomplete="organization"
+                                    oninput="syncPreview()"
+                                    required>
+                            </div>
+                            <div class="field-error" id="error-name"></div>
+                        </div>
+                        <div class="fg">
+                            <label>Business email <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                                    <path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                </svg>
+                                <input type="email"
+                                    class="has-icon"
+                                    name="business_email"
+                                    id="f-email"
+                                    placeholder="e.g. hello@store.com"
+                                    value="{{ form.business_email.value|default:request.user.email }}"
+                                    oninput="syncPreview()"
+                                    required>
+                            </div>
+                            <div class="field-error" id="error-email"></div>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="form-section-label">Contact</div>
+                    <div class="frow">
+                        <div class="fg">
+                            <label>Phone number <span class="req">*</span></label>
+                            <div class="phone-wrap">
+                                <div class="phone-prefix">🇳🇬 +234</div>
+                                <input type="text"
+                                    name="phone_number"
+                                    id="f-phone"
+                                    placeholder="080 0000 0000"
+                                    value="{{ form.phone_number.value|default:request.user.profile.phone_number }}"
+                                    oninput="syncPreview()"
+                                    required>
+                            </div>
+                            <div class="field-error" id="error-phone"></div>
+                        </div>
+                        <div class="fg">
+                            <label>Business type</label>
+                            <div class="input-wrap">
+                                <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <select class="has-icon" name="business_type" id="f-type" onchange="syncPreview()">
+                                    <option value="">Select category</option>
+                                    <option value="Restaurant">🍽 Restaurant</option>
+                                    <option value="Fast Food">🍔 Fast Food</option>
+                                    <option value="Bakery">🥐 Bakery</option>
+                                    <option value="Drinks">🥤 Drinks & Beverages</option>
+                                    <option value="Grills">🔥 Grills & BBQ</option>
+                                    <option value="Healthy">🥗 Healthy Food</option>
+                                    <option value="Snacks">🍿 Snacks</option>
+                                    <option value="Other">📦 Other</option>
+                                </select>
+                            </div>
+                            <div class="field-error" id="error-type"></div>
+                        </div>
+                    </div>
+
+                    <!-- About -->
+                    <div class="form-section-label">About your store</div>
+                    <div class="frow single">
+                        <div class="fg">
+                            <label>Description</label>
+                            <textarea
+                                name="description"
+                                id="f-desc"
+                                placeholder="e.g. We serve fresh Nigerian meals daily, made with love and the finest local ingredients..."
+                                maxlength="100"
+                                oninput="syncPreview(); updateCount(this, 'desc-count', 100)">{{ form.description.value|default:'' }}</textarea>
+                            <div class="char-counter" id="desc-count">0 / 100</div>
+                            <div class="field-error" id="error-desc"></div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="footer-row">
+                        <span class="required-note">* Required fields</span>
+                        <div style="display:flex;gap:10px;">
+                            <button type="button" class="btn-back" onclick="window.history.back()">Back</button>
+                            <button type="submit" class="btn-next">
+                                Continue
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ── LIVE PREVIEW COLUMN ── -->
+            <div class="preview-col">
+                <p class="preview-label">Live preview</p>
+
+                <div class="store-preview-card">
+
+                    <!-- Cover -->
+                    <div class="spc-cover" id="spc-cover">
+                        <div class="spc-cover-pattern"></div>
+                        <div class="spc-cover-gradient"></div>
+                        <!-- Floating logo -->
+                        <div class="spc-logo" id="spc-logo">V</div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="spc-info">
+                        <div class="spc-name placeholder" id="spc-name">Your store name</div>
+                        <div class="spc-meta">
+                            <span class="spc-rating">★★★★★</span>
+                            <span class="spc-sep">·</span>
+                            <span class="spc-open"><span class="spc-dot"></span>Open</span>
+                        </div>
+                    </div>
+
+                    <!-- Contact preview -->
+                    <div class="spc-contact">
+                        <div class="spc-contact-row">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/>
+                                <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            </svg>
+                            <span id="spc-email" style="color:#ddd;font-style:italic;">your@email.com</span>
+                            <div class="field-error" id="error-email"></div>
+                        </div>
+                        <div class="spc-contact-row">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.07 2.18 2 2 0 012.03 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.8"/>
+                            </svg>
+                            <span id="spc-phone" style="color:#ddd;font-style:italic;">+234 000 000 0000</span>
+                        </div>
+                        <div class="spc-contact-row" id="spc-type-row" style="display:none;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span id="spc-type"></span>
+                        </div>
+                    </div>
+
+                    <!-- Description preview -->
+                    <div class="spc-desc placeholder" id="spc-desc">
+                        Your store description will appear here...
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="spc-cta">
+                        <span>Order now</span>
+                        <span>→</span>
+                    </div>
+
+                </div>
+
+                <p class="preview-tip">Fill in the form to see<br>your store come to life</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+function syncPreview() {
+    const name  = document.getElementById('f-biz').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const desc  = document.getElementById('f-desc').value.trim();
+    const type  = document.getElementById('f-type');
+    const typeVal = type.options[type.selectedIndex]?.text || '';
+
+    /* ── Store name ── */
+    const nameEl = document.getElementById('spc-name');
+    const logoEl = document.getElementById('spc-logo');
+    if (name) {
+        nameEl.textContent = name;
+        nameEl.classList.remove('placeholder');
+        logoEl.textContent = name.charAt(0).toUpperCase();
+    } else {
+        nameEl.textContent = 'Your store name';
+        nameEl.classList.add('placeholder');
+        logoEl.textContent = 'V';
+    }
+
+    /* ── Email ── */
+    const emailEl = document.getElementById('spc-email');
+    if (email) {
+        emailEl.textContent = email;
+        emailEl.style.color = '';
+        emailEl.style.fontStyle = '';
+    } else {
+        emailEl.textContent = 'your@email.com';
+        emailEl.style.color = '#ddd';
+        emailEl.style.fontStyle = 'italic';
+    }
+
+    /* ── Phone ── */
+    const phoneEl = document.getElementById('spc-phone');
+    if (phone) {
+        phoneEl.textContent = '+234 ' + phone;
+        phoneEl.style.color = '';
+        phoneEl.style.fontStyle = '';
+    } else {
+        phoneEl.textContent = '+234 000 000 0000';
+        phoneEl.style.color = '#ddd';
+        phoneEl.style.fontStyle = 'italic';
+    }
+
+    /* ── Type ── */
+    const typeRow = document.getElementById('spc-type-row');
+    const typeEl  = document.getElementById('spc-type');
+    if (type.value) {
+        typeEl.textContent = typeVal;
+        typeRow.style.display = 'flex';
+    } else {
+        typeRow.style.display = 'none';
+    }
+
+    /* ── Description ── */
+    const descEl = document.getElementById('spc-desc');
+    if (desc) {
+        descEl.textContent = desc;
+        descEl.classList.remove('placeholder');
+    } else {
+        descEl.textContent = 'Your store description will appear here...';
+        descEl.classList.add('placeholder');
+    }
+}
+
+function updateCount(el, counterId, max) {
+    const len = el.value.length;
+    const counter = document.getElementById(counterId);
+    counter.textContent = `${len} / ${max}`;
+    counter.className = 'char-counter' + (len >= max ? ' full' : len >= max * 0.85 ? ' warn' : '');
+}
+
+document.getElementById('vendorForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let isValid = true;
+
+    // Fields
+    const name  = document.getElementById('f-biz');
+    const email = document.getElementById('f-email');
+    const phone = document.getElementById('f-phone');
+
+    // Reset
+    document.querySelectorAll('.field-error').forEach(el => {
+        el.classList.remove('show');
+        el.textContent = '';
+    });
+    document.querySelectorAll('input').forEach(el => {
+        el.classList.remove('input-error');
+    });
+
+    // Validation
+    if (!name.value.trim()) {
+        showError(name, 'error-name', 'Business name is required');
+        isValid = false;
+    }
+
+    if (!email.value.trim()) {
+        showError(email, 'error-email', 'Email is required');
+        isValid = false;
+    }
+
+    if (!phone.value.trim()) {
+        showError(phone, 'error-phone', 'Phone number is required');
+        isValid = false;
+    }
+
+    if (!isValid) {
+        showToast('Please fill all required fields');
+        return;
+    }
+
+    // ✅ Submit if valid
+    this.submit();
+});
+
+function showError(input, errorId, message) {
+    const errorEl = document.getElementById(errorId);
+
+    if (!errorEl) return;
+
+    errorEl.textContent = message;
+    errorEl.classList.add('show');
+
+    input.classList.add('input-error');
+}
+
+function showToast(message) {
+    let toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 50);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+/* REAL VALIDATION + SUBMIT */
+document.addEventListener('DOMContentLoaded', function() {
+
+    const form = document.getElementById('vendorForm');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        const name  = document.getElementById('f-biz');
+        const email = document.getElementById('f-email');
+        const phone = document.getElementById('f-phone');
+
+        // Reset errors
+        document.querySelectorAll('.field-error').forEach(el => {
+            el.classList.remove('show');
+            el.textContent = '';
+        });
+
+        document.querySelectorAll('input').forEach(el => {
+            el.classList.remove('input-error');
+        });
+
+        // Validation
+        if (!name.value.trim()) {
+            showError(name, 'error-name', 'Business name is required');
+            isValid = false;
+        }
+
+        if (!email.value.trim()) {
+            showError(email, 'error-email', 'Email is required');
+            isValid = false;
+        }
+
+        if (!phone.value.trim()) {
+            showError(phone, 'error-phone', 'Phone number is required');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            showToast('Please complete all required fields');
+            return;
+        }
+
+        // ✅ SUCCESS → submit to Django
+        form.submit();
+    });
+
+});
+
+
+/* Init */
+window.addEventListener('DOMContentLoaded', () => {
+    syncPreview();
+    const desc = document.getElementById('f-desc');
+    if (desc.value) updateCount(desc, 'desc-count', 200);
+});
+</script>
+</body>
+</html>

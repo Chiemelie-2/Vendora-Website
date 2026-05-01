@@ -1,0 +1,53 @@
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+<link rel="stylesheet" href="{% static 'css/account.css' %}" />
+
+{% include  'accounts/account_nav.html' %}
+<div class="account-settings-container">
+   
+  <!-- SIDEBAR -->
+  <aside class="account-sidebar">
+    <nav>
+      <a href="{% url 'accounts:manage_account' %}">Home</a>
+      <a href="{% url 'accounts:personal_info' %}">Personal info</a>
+      <a href="{% url 'accounts:security_settings' %}" class="active">Security</a>
+      <a href="#">Privacy &amp; Data</a>
+    </nav>
+  </aside>
+
+    <main class="main-content">
+        <h1 class="personal-info-header">Security</h1>
+        <p>Settings and recommendations to help you keep your account secure.</p>
+
+        <!-- PASSWORD CHANGE SECTION -->
+        <div class="info-section">
+            <div class="info-row">
+                <div class="row-left">
+                    <label>Password</label>
+                    <p>Last changed: {{ user.last_login|date:"F j, Y" }}</p>
+                </div>
+                <span class="chevron">❯</span>
+            </div>
+            
+            <form method="post" class="security-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="save-action-btn">Update Password</button>
+            </form>
+        </div>
+
+        <!-- SESSION MANAGEMENT -->
+        <div class="info-section" style="margin-top: 40px;">
+            <h3>Your devices</h3>
+            <p>You’re currently signed in to these devices.</p>
+            <div class="info-row">
+                <div class="row-left">
+                    <label>This device</label>
+                    <p>Windows • Lagos, Nigeria</p>
+                </div>
+            </div>
+            <a href="{% url 'accounts:logout' %}" class="btn-outline">Sign out of all devices</a>
+        </div>
+    </main>
+</div>

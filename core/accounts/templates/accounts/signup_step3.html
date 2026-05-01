@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tell Us About Yourself - Vendora Eats</title>
+    <link rel="stylesheet" href="{% static 'css/onboarding.css' %}">
+    <link rel="stylesheet" href="{% static 'css/signup_step3.css' %}">
+</head>
+<body>
+<div class="profile-card">
+
+    <!-- Logo -->
+    <div class="logo-row">
+        <div class="logo-icon">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" style="height:18px;width:auto;">
+        </div>
+        <span class="logo-name">Vendora <span class="logo-eats">Eats</span></span>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="progress-label">Step 2 of 3</div>
+    </div>
+
+    <h1>Tell us about yourself</h1>
+    <p class="sub">Help us personalise your Vendora Eats experience</p>
+
+    <form method="POST" id="profileForm">
+        {% csrf_token %}
+
+        <!-- Hidden role input submitted to Django -->
+        <input type="hidden" name="role" id="role-input">
+
+        <!-- Role Cards -->
+        <div class="role-row">
+            <div class="role-card" id="card-customer" onclick="selectRole('customer')">
+                <div class="role-check">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="role-icon">🍔</div>
+                <div class="role-title">Order Food</div>
+                <div class="role-sub">Browse and order from local vendors</div>
+            </div>
+            <div class="role-card" id="card-vendor" onclick="selectRole('vendor')">
+                <div class="role-check">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="role-icon">🏪</div>
+                <div class="role-title">Sell Food</div>
+                <div class="role-sub">List your meals and earn money</div>
+            </div>
+        </div>
+
+        <!-- Full Name -->
+        <div class="float-field">
+            <input
+                type="text"
+                name="full_name"
+                id="full-name"
+                placeholder=" "
+                value="{{ user.get_full_name|default:'' }}"
+                oninput="checkForm()"
+                required
+            >
+            <label for="full-name">Full Name</label>
+        </div>
+
+        <button type="submit" class="continue-btn" id="continue-btn" disabled>
+            Continue
+        </button>
+    </form>
+</div>
+
+<script>
+    let selectedRole = null;
+
+    // Pre-fill name check on load (for Google users)
+    window.addEventListener('load', checkForm);
+
+    function selectRole(role) {
+        selectedRole = role;
+        document.getElementById('role-input').value = role;
+        document.getElementById('card-customer').classList.toggle('selected', role === 'customer');
+        document.getElementById('card-vendor').classList.toggle('selected', role === 'vendor');
+        const btn = document.getElementById('continue-btn');
+        btn.textContent = role === 'customer' ? 'Continue as Customer' : 'Continue as Vendor';
+        checkForm();
+    }
+
+    function checkForm() {
+        const name = document.getElementById('full-name').value.trim();
+        const btn = document.getElementById('continue-btn');
+        const ready = selectedRole && name.length > 1;
+        btn.disabled = !ready;
+        btn.classList.toggle('active', ready);
+    }
+</script>
+</body>
+</html>

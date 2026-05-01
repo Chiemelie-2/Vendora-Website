@@ -1,0 +1,869 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review & Launch - Vendora Eats</title>
+    <link rel="stylesheet" href="{% static 'css/vendor_onboarding.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <style>
+        /* ── LAYOUT ── */
+        .review-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ══════════════════════════════════════
+           LEFT — SUMMARY
+        ══════════════════════════════════════ */
+        .summary-col {
+            width: 55%;
+            flex-shrink: 0;
+            overflow-y: auto;
+            padding: 28px 32px;
+            border-right: 1px solid #f3f4f6;
+        }
+
+        .summary-section {
+            margin-bottom: 20px;
+            border: 1.5px solid #f0f0f0;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .summary-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #fafafa;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .summary-icon {
+            width: 28px; height: 28px;
+            border-radius: 7px;
+            background: #eaf3de;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.82rem;
+        }
+
+        .edit-link {
+            display: flex; align-items: center; gap: 4px;
+            font-size: 0.75rem; color: #1FCB03;
+            text-decoration: none; font-weight: 500;
+            background: none; border: none; cursor: pointer; padding: 0;
+            transition: color 0.2s;
+        }
+        .edit-link:hover { color: #18B800; }
+
+        .summary-section-body {
+            padding: 14px 16px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .summary-row {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.82rem;
+        }
+        .summary-key { color: #aaa; }
+        .summary-val { color: #1a1a1a; font-weight: 500; text-align: right; }
+
+        /* Branding */
+        .brand-preview-wrap {
+            display: flex; gap: 12px; align-items: center;
+            padding: 14px 16px;
+        }
+        .brand-logo-thumb {
+            width: 52px; height: 52px; border-radius: 50%;
+            border: 2px solid #e5e7eb; overflow: hidden;
+            background: #f0fdf4;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .brand-logo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .brand-cover-thumb {
+            flex: 1; height: 52px; border-radius: 10px;
+            background: linear-gradient(135deg, #1a3a1a, #2d5a2d);
+            overflow: hidden; position: relative;
+        }
+        .brand-cover-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .brand-cover-label {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.68rem; color: rgba(255,255,255,0.5);
+        }
+
+        /* Menu thumbs */
+        .menu-thumbs {
+            display: flex; gap: 10px; padding: 14px 16px; overflow-x: auto;
+        }
+        .menu-thumb {
+            flex-shrink: 0; width: 80px;
+            border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden;
+        }
+        .menu-thumb-img {
+            width: 100%; height: 52px;
+            background: linear-gradient(135deg, #1a3a1a, #2d5a2d);
+            object-fit: cover; display: block;
+        }
+        .menu-thumb-name {
+            padding: 5px 6px; font-size: 0.65rem; font-weight: 500;
+            color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .menu-empty { font-size: 0.8rem; color: #bbb; padding: 14px 16px; }
+
+        /* Launch zone */
+        .launch-zone {
+            margin-top: 8px; padding: 20px;
+            background: #f0fdf4; border: 1.5px solid #d1fae5; border-radius: 14px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .launch-note { font-size: 0.85rem; color: #166534; font-weight: 500; }
+        .launch-note small {
+            display: block; font-size: 0.75rem; color: #4ade80;
+            font-weight: 400; margin-top: 2px;
+        }
+        .launch-btn {
+            display: flex; align-items: center; gap: 8px;
+            background: #1FCB03; color: #fff;
+            border: none; border-radius: 10px; padding: 12px 24px;
+            font-size: 0.9rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .launch-btn:hover {
+            background: #18B800;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(31,203,3,0.35);
+        }
+
+        /* ══════════════════════════════════════
+           RIGHT — PREMIUM STORE CARD PREVIEW
+        ══════════════════════════════════════ */
+        .preview-side {
+            flex: 1;
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #F0F4EE;
+            overflow-y: auto;
+            gap: 16px;
+            position: relative;
+        }
+
+        /* Subtle dot-grid texture */
+        .preview-side::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(26,122,26,0.08) 1px, transparent 1px);
+            background-size: 22px 22px;
+            pointer-events: none;
+        }
+
+        .preview-side-label {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #8aab8a;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Store Card ── */
+        .store-card {
+            width: 100%;
+            max-width: 320px;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.04),
+                0 12px 32px rgba(0,0,0,0.08),
+                0 32px 64px rgba(0,0,0,0.06);
+            overflow-y: scroll;
+            position: relative;
+            z-index: 1;
+            animation: cardRise 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        @keyframes cardRise {
+            from { opacity: 0; transform: translateY(16px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Cover */
+        .sc-cover {
+            height: 148px;
+            position: relative;
+            background: linear-gradient(135deg, #0f3d0f 0%, #1a7a1a 55%, #3aad3a 100%);
+        }
+        .sc-cover img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+        .sc-cover-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0) 35%,
+                rgba(0,0,0,0.5) 100%
+            );
+        }
+        /* Subtle noise on cover */
+        .sc-cover-texture {
+            position: absolute; inset: 0; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px;
+        }
+
+        /* Floating logo */
+        .sc-logo {
+            position: absolute;
+            bottom: -22px; left: 18px;
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            border: 3px solid #fff;
+            background: #f0fdf4;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.16);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800; font-size: 18px; color: #1a7a1a;
+            z-index: 2;
+        }
+        .sc-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Delivery badge on cover */
+        .sc-delivery-badge {
+            position: absolute;
+            top: 12px; right: 12px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.6rem; font-weight: 700;
+            color: #1a1a1a;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .sc-delivery-badge span { color: #1FCB03; }
+
+        /* Info block */
+        .sc-info {
+            padding: 32px 18px 14px;
+            display: flex; flex-direction: column; gap: 5px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .sc-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.05rem; font-weight: 800;
+            color: #0f1a0f; letter-spacing: -0.4px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sc-meta {
+            display: flex; align-items: center; gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sc-rating {
+            display: flex; align-items: center; gap: 3px;
+            font-size: 0.72rem; color: #F59E0B; font-weight: 700;
+        }
+        .sc-rating em {
+            color: #888; font-style: normal; font-weight: 400; font-size: 0.68rem;
+        }
+        .sc-sep { color: #ddd; font-size: 0.7rem; }
+        .sc-open-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.62rem; font-weight: 700; color: #166534;
+            font-family: 'Sora', sans-serif;
+        }
+        .sc-open-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: #1FCB03;
+            box-shadow: 0 0 0 2px rgba(31,203,3,0.2);
+            animation: blink-dot 2s ease-in-out infinite;
+        }
+        @keyframes blink-dot {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.4; }
+        }
+        .sc-tags {
+            display: flex; gap: 5px; flex-wrap: wrap; margin-top: 3px;
+        }
+        .sc-tag {
+            font-size: 0.6rem; color: #888;
+            background: #f8f8f8; border-radius: 6px;
+            padding: 2px 7px; font-weight: 500;
+        }
+
+        /* Stats strip */
+        .sc-stats {
+            display: flex;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .sc-stat {
+            flex: 1;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 12px 8px;
+            border-right: 1px solid #f5f5f5;
+            gap: 2px;
+        }
+        .sc-stat:last-child { border-right: none; }
+        .sc-stat-val {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.82rem; font-weight: 700; color: #0f1a0f;
+        }
+        .sc-stat-key {
+            font-size: 0.58rem; color: #aaa; font-weight: 500;
+            text-transform: uppercase; letter-spacing: 0.4px;
+        }
+
+        /* Menu section */
+        .sc-menu-head {
+            padding: 14px 18px 8px;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.7rem; font-weight: 700;
+            color: #1a1a1a; letter-spacing: 0.3px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .sc-menu-see-all {
+            font-size: 0.62rem; color: #1FCB03; font-weight: 600; cursor: pointer;
+        }
+        .sc-menu-list {
+            padding: 0 12px 16px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .sc-menu-item {
+            display: flex; align-items: center; gap: 11px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: #fafcfa;
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+        }
+        .sc-menu-item:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+            border-color: rgba(31,203,3,0.2);
+        }
+        .sc-item-img {
+            width: 46px; height: 46px; border-radius: 10px;
+            background: linear-gradient(135deg, #1a3a1a, #2d5a2d);
+            overflow: hidden; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        .sc-item-img img { width: 100%; height: 100%; object-fit: cover; }
+        .sc-item-info { flex: 1; min-width: 0; }
+        .sc-item-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.78rem; font-weight: 700; color: #0f1a0f;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            margin-bottom: 3px;
+        }
+        .sc-item-desc {
+            font-size: 0.62rem; color: #aaa;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sc-item-price {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.75rem; font-weight: 800; color: #0f1a0f;
+            margin-top: 5px;
+        }
+        .sc-add-btn {
+            width: 28px; height: 28px; flex-shrink: 0;
+            background: #1FCB03; border-radius: 50%; color: #fff;
+            font-size: 1.1rem; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 3px 10px rgba(31,203,3,0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
+            font-weight: 300;
+        }
+        .sc-menu-item:hover .sc-add-btn {
+            transform: scale(1.12) rotate(90deg);
+            box-shadow: 0 5px 16px rgba(31,203,3,0.45);
+        }
+        .sc-empty {
+            font-size: 0.72rem; color: #ccc;
+            text-align: center; padding: 14px; font-style: italic;
+        }
+
+        /* Bottom CTA strip */
+        .sc-cta {
+            margin: 0 12px 14px;
+            background: linear-gradient(135deg, #1FCB03, #18B800);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(31,203,3,0.25);
+        }
+        .sc-cta-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.7rem; font-weight: 700; color: #fff;
+        }
+        .sc-cta-sub { font-size: 0.58rem; color: rgba(255,255,255,0.75); margin-top: 2px; }
+        .sc-cta-arrow {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255,255,255,0.22);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 0.9rem;
+        }
+
+        /* Preview note */
+        .preview-note {
+            font-size: 0.68rem;
+            color: #9aad9a;
+            text-align: center;
+            line-height: 1.6;
+            position: relative; z-index: 1;
+            font-style: italic;
+        }
+
+        /* ══════════════════════════════════════
+           SUCCESS OVERLAY
+        ══════════════════════════════════════ */
+        .success-overlay {
+            position: fixed; inset: 0;
+            background: rgba(10,30,10,0.85);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 999; opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .success-overlay.show { opacity: 1; pointer-events: all; }
+        .success-card {
+            background: #fff; border-radius: 24px;
+            padding: 48px 40px; text-align: center;
+            max-width: 400px; width: 90%;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+        .success-overlay.show .success-card { transform: translateY(0); }
+        .success-emoji {
+            font-size: 3rem; margin-bottom: 16px;
+            animation: bounce 0.6s ease 0.3s both;
+        }
+        @keyframes bounce {
+            0%  { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.15); }
+            100%{ transform: scale(1); opacity: 1; }
+        }
+        .success-title { font-size: 1.4rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+        .success-sub { font-size: 0.85rem; color: #888; line-height: 1.6; margin-bottom: 20px; }
+        .success-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eaf3de; color: #27500a;
+            font-size: 0.78rem; font-weight: 600;
+            padding: 8px 16px; border-radius: 20px; margin-bottom: 24px;
+        }
+        .success-live-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: #1FCB03; animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .success-go-btn {
+            width: 100%; padding: 13px;
+            background: #1FCB03; color: #fff; border: none;
+            border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .success-go-btn:hover { background: #18B800; }
+    </style>
+</head>
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sb-logo">
+            <div class="sb-logo-icon">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" style="height:16px;width:auto;">
+            </div>
+            <span class="sb-logo-name">Vendora <span class="sb-logo-eats">Eats</span></span>
+        </div>
+        <div class="steps">
+            <div class="step done">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="step-label">Business info</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step done">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="step-label">Location</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step done">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="step-label">Store branding</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step done">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="step-label">Menu</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step active">
+                <div class="step-dot">5</div>
+                <div class="step-label">Review & submit</div>
+            </div>
+        </div>
+        <p class="sb-footer">© 2026 Vendora Eats</p>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+        <div class="main-header">
+            <h1>You're almost live!</h1>
+            <p>Review your store details before launching to customers</p>
+        </div>
+
+        <div class="review-body">
+
+            <!-- LEFT — SUMMARY -->
+            <div class="summary-col">
+
+                <!-- Store Info -->
+                <div class="summary-section">
+                    <div class="summary-section-header">
+                        <div class="summary-section-title">
+                            <div class="summary-icon">🏪</div>
+                            Store info
+                        </div>
+                        <a href="{% url 'vendor_onboarding:register_business' %}?edit=true" class="edit-link">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                        </a>
+                    </div>
+                    <div class="summary-section-body">
+                        <div class="summary-row">
+                            <span class="summary-key">Store name</span>
+                            <span class="summary-val">{{ restaurant.name|default:"—" }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-key">Email</span>
+                            <span class="summary-val">{{ restaurant.business_email|default:"—" }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-key">Phone</span>
+                            <span class="summary-val">{{ restaurant.phone_number|default:"—" }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-key">Status</span>
+                            <span class="summary-val" style="color:#f59e0b;">{{ restaurant.get_status_display }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="summary-section">
+                    <div class="summary-section-header">
+                        <div class="summary-section-title">
+                            <div class="summary-icon">📍</div>
+                            Location
+                        </div>
+                        <a href="{% url 'vendor_onboarding:edit_location' %}" class="edit-link">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                        </a>
+                    </div>
+                    <div class="summary-section-body">
+                        <div class="summary-row">
+                            <span class="summary-key">Address</span>
+                            <span class="summary-val">{{ restaurant.address|default:"—" }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-key">City</span>
+                            <span class="summary-val">{{ restaurant.city|default:"—" }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-key">State</span>
+                            <span class="summary-val">{{ restaurant.post_code|default:"—" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Branding -->
+                <div class="summary-section">
+                    <div class="summary-section-header">
+                        <div class="summary-section-title">
+                            <div class="summary-icon">🎨</div>
+                            Branding
+                        </div>
+                        <a href="{% url 'vendor_onboarding:store_branding' %}" class="edit-link">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                        </a>
+                    </div>
+                    <div class="brand-preview-wrap">
+                        <div class="brand-logo-thumb">
+                            {% if restaurant.logo %}
+                                <img src="{{ restaurant.logo.url }}" alt="Logo">
+                            {% else %}
+                                🏪
+                            {% endif %}
+                        </div>
+                        <div class="brand-cover-thumb">
+                            {% if restaurant.cover_image %}
+                                <img src="{{ restaurant.cover_image.url }}" alt="Cover">
+                            {% else %}
+                                <div class="brand-cover-label">No cover yet</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu -->
+                <div class="summary-section">
+                    <div class="summary-section-header">
+                        <div class="summary-section-title">
+                            <div class="summary-icon">🍔</div>
+                            Menu
+                            <span style="font-size:0.72rem;color:#aaa;font-weight:400;">
+                                ({{ menu_items.count }} item{{ menu_items.count|pluralize }})
+                            </span>
+                        </div>
+                        <a href="{% url 'vendor_onboarding:menu' %}" class="edit-link">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                        </a>
+                    </div>
+                    {% if menu_items %}
+                        <div class="menu-thumbs">
+                            {% for item in menu_items|slice:":4" %}
+                            <div class="menu-thumb">
+                                {% if item.image %}
+                                    <img class="menu-thumb-img" src="{{ item.image.url }}" alt="">
+                                {% else %}
+                                    <div class="menu-thumb-img"></div>
+                                {% endif %}
+                                <div class="menu-thumb-name">{{ item.name }}</div>
+                            </div>
+                            {% endfor %}
+                            {% if menu_items.count > 4 %}
+                            <div class="menu-thumb" style="display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#aaa;border:1.5px dashed #e5e7eb;border-radius:10px;height:80px;">
+                                +{{ menu_items.count|add:"-4" }} more
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="menu-empty">No menu items yet — <a href="{% url 'vendor_onboarding:menu' %}" style="color:#1FCB03;">add some</a></div>
+                    {% endif %}
+                </div>
+
+                <!-- LAUNCH -->
+                <div class="launch-zone">
+                    <div class="launch-note">
+                        Everything looks great 🎉
+                        <small>Your store will go live immediately</small>
+                    </div>
+                    <form method="POST" style="margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="launch-btn" onclick="showSuccess(event)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" fill="#fff"/>
+                            </svg>
+                            Launch my store
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- ══════════════════════════════════════
+                 RIGHT — PREMIUM STORE CARD PREVIEW
+                 No phone frame. Real product UI.
+            ══════════════════════════════════════ -->
+            <div class="preview-side">
+                <p class="preview-side-label">Live customer view</p>
+
+                <div class="store-card">
+
+                    <!-- Cover image -->
+                    <div class="sc-cover">
+                        {% if restaurant.cover_image %}
+                            <img src="{{ restaurant.cover_image.url }}" alt="Cover">
+                        {% endif %}
+                        <div class="sc-cover-texture"></div>
+                        <div class="sc-cover-overlay"></div>
+
+                        <!-- Delivery time badge -->
+                        <div class="sc-delivery-badge">
+                            🛵 <span>20–35 min</span>
+                        </div>
+
+                        <!-- Floating logo -->
+                        <div class="sc-logo">
+                            {% if restaurant.logo %}
+                                <img src="{{ restaurant.logo.url }}" alt="">
+                            {% else %}
+                                {{ restaurant.name|first|default:"V" }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Store info -->
+                    <div class="sc-info">
+                        <div class="sc-name">{{ restaurant.name|default:"Your Store Name" }}</div>
+                        <div class="sc-meta">
+                            <span class="sc-rating">★★★★★ <em>5.0 (New)</em></span>
+                            <span class="sc-sep">·</span>
+                            <span class="sc-open-badge">
+                                <span class="sc-open-dot"></span>
+                                Open now
+                            </span>
+                        </div>
+                        <div class="sc-tags">
+                            <span class="sc-tag">🍽 Restaurant</span>
+                            <span class="sc-tag">📍 {{ restaurant.city|default:"Your City" }}</span>
+                            <span class="sc-tag">💳 Pay on delivery</span>
+                        </div>
+                    </div>
+
+                    <!-- Menu items -->
+                    <div class="sc-menu-head">
+                        Popular items
+                        <span class="sc-menu-see-all">See all →</span>
+                    </div>
+                    <div class="sc-menu-list">
+                        {% for item in menu_items|slice:":3" %}
+                        <div class="sc-menu-item">
+                            <div class="sc-item-img">
+                                {% if item.image %}
+                                    <img src="{{ item.image.url }}" alt="">
+                                {% else %}
+                                    🍽
+                                {% endif %}
+                            </div>
+                            <div class="sc-item-info">
+                                <div class="sc-item-name">{{ item.name }}</div>
+                                <div class="sc-item-desc">{{ item.description|default:"Freshly prepared"|truncatechars:32 }}</div>
+                                <div class="sc-item-price">₦{{ item.price }}</div>
+                            </div>
+                            <div class="sc-add-btn">+</div>
+                        </div>
+                        {% empty %}
+                        <div class="sc-menu-item">
+                            <div class="sc-item-img">🍛</div>
+                            <div class="sc-item-info">
+                                <div class="sc-item-name">Jollof Rice Special</div>
+                                <div class="sc-item-desc">Smoky party jollof with chicken</div>
+                                <div class="sc-item-price">₦2,500</div>
+                            </div>
+                            <div class="sc-add-btn">+</div>
+                        </div>
+                        <div class="sc-menu-item">
+                            <div class="sc-item-img">🍗</div>
+                            <div class="sc-item-info">
+                                <div class="sc-item-name">Grilled Chicken</div>
+                                <div class="sc-item-desc">Served with coleslaw & fries</div>
+                                <div class="sc-item-price">₦3,800</div>
+                            </div>
+                            <div class="sc-add-btn">+</div>
+                        </div>
+                        <div class="sc-menu-item">
+                            <div class="sc-item-img">🥘</div>
+                            <div class="sc-item-info">
+                                <div class="sc-item-name">Pepper Soup</div>
+                                <div class="sc-item-desc">Spicy catfish pepper soup</div>
+                                <div class="sc-item-price">₦3,200</div>
+                            </div>
+                            <div class="sc-add-btn">+</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Bottom CTA -->
+                    <div class="sc-cta">
+                        <div>
+                            <div class="sc-cta-text">Order from {{ restaurant.name|default:"this store" }}</div>
+                            <div class="sc-cta-sub">Free delivery on first order</div>
+                        </div>
+                        <div class="sc-cta-arrow">→</div>
+                    </div>
+
+                </div>
+
+                <p class="preview-note">
+                    Exactly how customers will see<br>your store on the marketplace
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+        <div class="success-emoji">🎉</div>
+        <div class="success-title">Your store is now live!</div>
+        <div class="success-sub">
+            {{ restaurant.name }} is now visible on the Vendora Eats marketplace.
+            Customers can find and order from you right now.
+        </div>
+        <div class="success-badge">
+            <div class="success-live-dot"></div>
+            Live on marketplace
+        </div>
+        <button class="success-go-btn" onclick="goToDashboard()">
+            Go to my dashboard →
+        </button>
+    </div>
+</div>
+
+<script>
+    function showSuccess(e) {
+        e.preventDefault();
+        document.getElementById('successOverlay').classList.add('show');
+    }
+    function goToDashboard() {
+        document.querySelector('form').submit();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+/* ══════════════════════════════════════════════════════
+           VENDORA EATS — FEEDBACK COLOR SYSTEM
+        ══════════════════════════════════════════════════════ */
+        :root {
+            --clr-error-base:   #DC2626;
+            --clr-error-bg:     #FEF2F2;
+            --clr-error-border: #FCA5A5;
+            --clr-error-text:   #B91C1C;
+
+            --clr-warn-base:    #F59E0B;
+            --clr-warn-bg:      #FFFBEB;
+            --clr-warn-border:  #FCD34D;
+            --clr-warn-text:    #92400E;
+
+            --clr-ok-base:      #16A34A;
+            --clr-ok-bg:        #F0FDF4;
+            --clr-ok-border:    #86EFAC;
+            --clr-ok-text:      #15803D;
+
+            --clr-info-base:    #2563EB;
+            --clr-info-bg:      #EFF6FF;
+            --clr-info-border:  #BFDBFE;
+            --clr-info-text:    #1D4ED8;
+
+            --clr-brand:        #2F8F2F;
+            --clr-brand-focus:  rgba(47,143,47,0.14);
+        }
+
+        /* ── INPUT FOCUS — brand green ───────────────────── */
+        .ifield input:focus,
+        .ifield textarea:focus,
+        .ifield select:focus,
+        .price-wrap input:focus {
+            outline: none;
+            border-color: var(--clr-brand) !important;
+            box-shadow: 0 0 0 3px var(--clr-brand-focus);
+        }
+
+        /* ── ERROR STATE ────────────────────────────────── */
+        .ifield.is-error input,
+        .ifield.is-error textarea,
+        .ifield.is-error .price-wrap input {
+            border-color: var(--clr-error-base) !important;
+            background:   var(--clr-error-bg)   !important;
+            box-shadow:   0 0 0 3px rgba(220,38,38,.10);
+        }
+
+        /* ── SUCCESS STATE ──────────────────────────────── */
+        .ifield.is-success input,
+        .ifield.is-success textarea,
+        .ifield.is-success .price-wrap input {
+            border-color: var(--clr-ok-base) !important;
+            background:   var(--clr-ok-bg)   !important;
+        }
+
+        /* ── WARNING STATE ──────────────────────────────── */
+        .ifield.is-warning input,
+        .ifield.is-warning textarea,
+        .ifield.is-warning .price-wrap input {
+            border-color: var(--clr-warn-base) !important;
+            background:   var(--clr-warn-bg)   !important;
+        }
+
+        /* ── FIELD MESSAGE ──────────────────────────────── */
+        .field-msg {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            margin-top: 5px;
+            line-height: 1.4;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .field-msg.visible  { display: flex; }
+        .field-msg.msg-error   { color: var(--clr-error-text); }
+        .field-msg.msg-success { color: var(--clr-ok-text); }
+        .field-msg.msg-warning { color: var(--clr-warn-text); }
+        .field-msg.msg-info    { color: var(--clr-info-text); }
+        .field-msg svg { flex-shrink: 0; }
+
+        /* Required asterisk */
+        .req { color: var(--clr-error-base); margin-left: 2px; font-weight: 600; }
+
+        /* ── TOAST CONTAINER — top right ─────────────────── */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            width: 300px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 13px 14px 13px 14px;
+            border-radius: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+            pointer-events: all;
+            opacity: 0;
+            transform: translateX(20px);
+            animation: toastIn .30s cubic-bezier(.34,1.56,.64,1) forwards;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+        .toast.hiding { animation: toastOut .22s ease forwards; }
+
+        /* Auto-dismiss progress bar */
+        .toast::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: rgba(255,255,255,.35);
+            transform-origin: left;
+            animation: toastBar var(--dur, 3.8s) linear forwards;
+        }
+        @keyframes toastBar { to { transform: scaleX(0); } }
+
+        /* Pause on hover */
+        .toast:hover, .toast:hover::after { animation-play-state: paused; }
+
+        .toast.t-success { background: linear-gradient(135deg, #22C55E 0%, #15803D 100%); }
+        .toast.t-error   { background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%); }
+        .toast.t-warning { background: linear-gradient(135deg, #F59E0B 0%, #B45309 100%); }
+        .toast.t-info    { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
+
+        .toast-icon {
+            flex-shrink: 0;
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .toast-body { flex: 1; min-width: 0; }
+        .toast-title { font-size: 13px; font-weight: 700; line-height: 1.2; margin-bottom: 2px; }
+        .toast-msg   { font-size: 12px; opacity: .88; line-height: 1.4; }
+        .toast-close {
+            flex-shrink: 0; margin-top: 1px;
+            background: rgba(255,255,255,.15); border: none;
+            border-radius: 50%; width: 20px; height: 20px;
+            cursor: pointer; padding: 0; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s;
+        }
+        .toast-close:hover { background: rgba(255,255,255,.35); }
+
+        @keyframes toastIn  { to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastOut { to { opacity: 0; transform: translateX(14px); } }
+
+        /* ── CONFIRM MODAL ──────────────────────────────────── */
+        #confirm-overlay {
+            position: fixed; inset: 0; z-index: 9998;
+            background: rgba(10,10,10,.48);
+            backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity .22s ease;
+        }
+        #confirm-overlay.visible { opacity: 1; pointer-events: all; }
+
+        #confirm-box {
+            background: #fff; border-radius: 20px;
+            padding: 32px 28px 24px; width: 340px; max-width: 90vw;
+            box-shadow: 0 24px 64px rgba(0,0,0,.18);
+            transform: scale(.93) translateY(12px);
+            transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+            text-align: center;
+        }
+        #confirm-overlay.visible #confirm-box { transform: scale(1) translateY(0); }
+
+        .confirm-icon-wrap {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--clr-error-bg);
+            border: 1.5px solid var(--clr-error-border);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+        }
+        #confirm-title {
+            font-family: 'Segoe UI', sans-serif; font-size: 17px;
+            font-weight: 700; color: #111; margin: 0 0 8px;
+        }
+        #confirm-message {
+            font-family: 'Segoe UI', sans-serif; font-size: 14px;
+            color: #6B7280; margin: 0 0 24px; line-height: 1.5;
+        }
+        .confirm-actions { display: flex; gap: 10px; }
+        .confirm-btn {
+            flex: 1; padding: 11px 18px; border-radius: 10px; border: none;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .confirm-btn:active { transform: scale(.97); }
+        .confirm-btn.cancel { background: #F3F4F6; color: #374151; }
+        .confirm-btn.cancel:hover { background: #E5E7EB; }
+        .confirm-btn.danger {
+            background: linear-gradient(135deg, #EF4444, #B91C1C);
+            color: #fff; box-shadow: 0 4px 14px rgba(239,68,68,.3);
+        }
+        .confirm-btn.danger:hover { box-shadow: 0 6px 18px rgba(239,68,68,.45); }

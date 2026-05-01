@@ -1,0 +1,137 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/manage_account.css' %}" />
+<script src="{% static 'js/profile_modal.js' %}" defer></script>
+
+
+<!-- ACCOUNT NAVBAR -->
+{% include "accounts/account_nav.html" %}
+
+<div class="account-container">
+
+  <!-- SIDEBAR -->
+  <aside class="account-sidebar">
+    <nav>
+      <a href="{% url 'accounts:manage_account' %}">Home</a>
+      <a href="{% url 'accounts:personal_info' %}" class="active">Personal info</a>
+      <a href="{% url 'accounts:security_settings' %}">Security</a>
+      <a href="#">Privacy &amp; Data</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="account-main">
+    <h1>Personal info</h1>
+
+    <!-- ===================== SINGLE FORM (avatar + email only) ===================== -->
+    <form method="post" enctype="multipart/form-data" id="personal-info-form">
+      {% csrf_token %}
+
+      <!-- PROFILE PHOTO MODAL -->
+      <div id="photoModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+          <h2 class="modal-title">Profile Photo</h2>
+          <p class="modal-subtitle">This is the photo you would like others to see.</p>
+          <button type="button" class="btn-update-photo" id="update-photo-btn">Update Photo</button>
+          <button type="button" class="btn-cancel-modal" id="cancel-modal-btn">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Hidden file input rendered ONCE -->
+      <div style="display:none;">{{ form.profile_image }}</div>
+
+      <!-- AVATAR (clickable) -->
+      <div class="profile-avatar-container" id="open-modal-btn">
+        {% if profile.profile_image and profile.profile_image.name %}
+          <img src="{{ profile.profile_image.url }}" class="avatar-img" id="preview-image" alt="Profile photo">
+        {% else %}
+          <div class="avatar-placeholder" id="preview-image">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </div>
+        {% endif %}
+        <div class="edit-overlay">&#9998;</div>
+      </div>
+
+      <!-- INFO ROWS -->
+      <div class="info-list">
+
+        <!--error: 'username' is not a valid field of User -->
+        {% if form.username.errors %}
+        <p style="color: red; font-size: 12px;">{{ form.username.errors.0 }}</p>
+        {% endif %}
+
+        <!-- USERNAME (read-only) -->
+        <div class="info-row">
+          <div class="row-left">
+            <label>Username</label>
+             {{ form.username }}
+          </div>
+          <span class="chevron">&#10095;</span>
+        </div>
+
+        <!-- NAME (read-only) -->
+        <div class="info-row">
+          <div class="row-left">
+            <label>Name</label>
+            <p class="static-value">
+              {% if user.get_full_name %}
+                  {{ user.get_full_name }}
+              {% else %}
+                  <span style="color: #999; font-style: italic;">No name set</span>
+              {% endif %}
+            </p>
+          </div>
+          <span class="lock-icon" style="color: #dadce0;">🔒</span>
+        </div>
+
+        <!-- PHONE — navigates to dedicated edit page -->
+        <a href="{% url 'accounts:edit_phone' %}" class="info-row info-row-link">
+          <div class="row-left">
+            <label>Phone number</label>
+            <div class="input-wrapper">
+              {% if profile.phone_number %}
+                <span class="row-value">{{ profile.phone_number }}</span>
+                <span class="verified-badge" title="Verified">&#10004;</span>
+              {% else %}
+                <span class="unverified-text">Add your phone number</span>
+              {% endif %}
+            </div>
+          </div>
+          <span class="chevron">&#10095;</span>
+        </a>
+
+        <!-- EMAIL — navigates to dedicated edit page -->
+        <a href="{% url 'accounts:edit_email' %}" class="info-row info-row-link">
+          <div class="row-left">
+            <label>Email</label>
+            <div class="input-wrapper">
+              {% if user.email %}
+                <span class="row-value">{{ user.email }}</span>
+                <span class="verified-badge" title="Verified">&#10004;</span>
+              {% else %}
+                <span class="unverified-text">Add your email</span>
+              {% endif %}
+            </div>
+          </div>
+          <span class="chevron">&#10095;</span>
+        </a>
+
+        <!-- LANGUAGE -->
+        {% comment %} <div class="info-row">
+          <div class="row-left">
+            <label>Language</label>
+            <p>Update device language</p>
+          </div>
+          <span class="icon-export">&#10697;</span>
+        </div> {% endcomment %}
+
+      </div><!-- /info-list -->
+
+      <button type="submit" class="save-action-btn">Save Changes</button>
+
+    </form>
+  </main>
+</div>
+
+

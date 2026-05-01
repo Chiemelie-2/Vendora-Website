@@ -1,0 +1,150 @@
+{% load static %}
+
+{% comment %} {% include "accounts/account_nav.html" %} {% endcomment %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Step 1</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+    <style>
+      .social-auth {
+        margin-top: 25px;
+        text-align: center;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+      }
+      .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 90%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+      .google-btn:hover {
+        background: #f9f9f9;
+      }
+      .google-btn img {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="onboarding-container">
+        <div class="container">
+            <div class="hero-images">
+                <img src="{% static 'images/hero-image1.png' %}" alt="Hero Image" />
+                <div class="hero-text">
+                    <div class="logo-container">
+                        <div class="logo-icon">
+                            <img src="{% static 'images/logo.png' %}" alt="Logo" />
+                        </div>
+                        <div class="logo-text">
+                            <h2>Vendora</h2>
+                            <p>Eats</p>
+                        </div>
+                    </div>
+
+                    <div class="hero-subtext">
+                    
+                        <h1>Welcome to<br>Vendora Eats</h1>
+                        <p>Order food from your favorite vendors, delivered fast to your door.</p>
+                        <div class="hero-features">
+                            <div class="hero-feature-item">
+                                <div class="hero-feature-icon">✓</div>
+                                <span>100+ local vendors</span>
+                            </div>
+                            <div class="hero-feature-item">
+                                <div class="hero-feature-icon">✓</div>
+                                <span>Fast delivery near you</span>
+                            </div>
+                            <div class="hero-feature-item">
+                                <div class="hero-feature-icon">✓</div>
+                                <span>Easy & secure checkout</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="hero-footer">© 2026 Vendora Eats</p>
+                </div>
+            </div>
+            <div class="auth-card">
+                
+                <h2 style="font-weight: b; color: #1A1A1A;">Create Account</h2>
+                <p>Enter your email to join Vendora Eats today</p>
+
+                <!-- STEP 1: ONLY EMAIL -->
+               
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="float-fieldset">
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder=" "
+                            required
+                        />
+                        <label for="email">Email or Mobile Number*</label>
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn-get-started"
+                        style="width: 100%; border: none; cursor: pointer; margin-top: 10px; background: #1fcb03; color: #ffffff;"
+                    >
+                        Verify Email
+                    </button>
+                </form>
+
+                <!-- GOOGLE AUTH SECTION -->
+                <div class="social-auth">
+                    <p style="font-size: 0.9rem; color: #888; margin-bottom: 15px">
+                        Or sign up with
+                    </p>
+
+                    <a href="{% url 'google_login' %}" class="google-btn" style="text-decoration: none;">
+                        <!-- Using inline SVG instead of broken image URL -->
+                        <svg width="20" height="20" viewBox="0 0 48 48">
+                        <path
+                            fill="#EA4335"
+                            d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.1-6.1C34.46 3.05 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.22l7.1 5.52C12.4 13.67 17.73 9.5 24 9.5z"
+                        />
+                        <path
+                            fill="#4285F4"
+                            d="M46.52 24.5c0-1.64-.15-3.22-.42-4.74H24v8.98h12.7c-.55 2.94-2.2 5.44-4.68 7.12l7.18 5.58C43.43 37.28 46.52 31.36 46.52 24.5z"
+                        />
+                        <path
+                            fill="#FBBC05"
+                            d="M10.74 28.26A14.5 14.5 0 0 1 9.5 24c0-1.48.25-2.91.74-4.26l-7.1-5.52A23.93 23.93 0 0 0 0 24c0 3.86.92 7.5 2.54 10.72l8.2-6.46z"
+                        />
+                        <path
+                            fill="#34A853"
+                            d="M24 47c5.5 0 10.12-1.82 13.5-4.94l-7.18-5.58C28.5 38.1 26.38 38.5 24 38.5c-6.27 0-11.6-4.17-13.26-9.74l-8.2 6.46C6.07 41.52 14.36 47 24 47z"
+                        />
+                        </svg>
+                        Continue with Google
+                    </a>
+                </div>
+
+                <div class="auth-footer">
+                    <p style="font-size: 0.9rem; color: #888">
+                        Already have an account?
+                        <a href="{% url 'accounts:login' %}" style="text-decoration: none; color: #2F8F2F; font-weight: bold;">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

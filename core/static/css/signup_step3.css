@@ -1,0 +1,178 @@
+
+body {
+    background: #f5f6f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 44px 40px;
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+/* Logo */
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(232, 232, 232, 0.208);
+}
+.logo-name { font-size: 1rem; font-weight: 600; color: #1a1a1a; }
+.logo-eats { color: #1FCB03; }
+
+/* Progress */
+.progress-wrap { margin-bottom: 28px; }
+.progress-bar {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 66%;
+    background: #1FCB03;
+    border-radius: 2px;
+}
+.progress-label {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 6px;
+    text-align: right;
+}
+
+/* Heading */
+.profile-card h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+    text-align: center;
+}
+.profile-card .sub {
+    font-size: 0.88rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 28px;
+    line-height: 1.5;
+}
+
+/* Role Cards */
+.role-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.role-card {
+    border: 1.5px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    background: #fff;
+    position: relative;
+}
+.role-card:hover {
+    border-color: #a3d9a5;
+    transform: translateY(-2px);
+}
+.role-card.selected {
+    border-color: #2F8F2F;
+    background: #f2fbf2;
+    transform: scale(1.02);
+}
+.role-check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1FCB03;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.role-card.selected .role-check { display: flex; }
+.role-icon { font-size: 2rem; margin-bottom: 10px; }
+.role-title { font-size: 0.95rem; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+.role-sub { font-size: 0.78rem; color: #888; line-height: 1.4; }
+
+/* Float Label Input */
+.float-field {
+    position: relative;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    padding: 0 14px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+.float-field input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 20px 0 8px 0;
+    background: transparent;
+    color: #1a1a1a;
+}
+.float-field label {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+    color: #9ca3af;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background: #fff;
+    padding: 0 3px;
+}
+.float-field input:focus + label,
+.float-field input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 0.72rem;
+    color: #2F8F2F;
+}
+.float-field:focus-within { border-color: #2F8F2F; }
+
+/* Button */
+.continue-btn {
+    width: 100%;
+    padding: 14px;
+    background: #c8c8c8;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: not-allowed;
+    transition: all 0.2s;
+}
+.continue-btn.active {
+    background: #1FCB03;
+    cursor: pointer;
+}
+.continue-btn.active:hover { background: #18B800; }

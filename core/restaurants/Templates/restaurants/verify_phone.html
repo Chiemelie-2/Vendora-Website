@@ -1,0 +1,73 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}" />
+
+<div class="merchant-page">
+  <div class="merchant-form-container">
+    <div class="merchant-card">
+      <h2>Verify your number</h2>
+      <p>
+        We've sent a code to <strong>{{ request.session.temp_phone }}</strong>
+      </p>
+
+      {% if error %}
+      <p style="color: red">{{ error }}</p>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Enter 6-digit code</label>
+          <input
+            type="text"
+            name="otp_code"
+            placeholder="123456"
+            required
+            style="letter-spacing: 10px; font-size: 24px; text-align: center"
+          />
+        </div>
+        <button type="submit" class="btn-submit">Verify & Create Store</button>
+      </form>
+
+      <!-- to include the resend button and a JavaScript timer that disables it for 60 seconds. -->
+      <div
+        id="timer-box"
+        style="margin-top: 20px; font-size: 0.9rem; color: #666"
+      >
+        Didn't get the code?
+        <span id="countdown">60</span>s
+      </div>
+
+      <a
+        href="{% url 'restaurants:resend_otp' %}"
+        id="resend-btn"
+        style="
+          display: none;
+          color: #34d399;
+          text-decoration: none;
+          font-weight: bold;
+          margin-top: 10px;
+        "
+      >
+        Resend Code (Attempt {{ request.session.resend_count }}/3)
+      </a>
+
+      <script>
+        let timeLeft = 60;
+        let timerElement = document.getElementById("countdown");
+        let resendBtn = document.getElementById("resend-btn");
+        let timerBox = document.getElementById("timer-box");
+
+        let countdownInterval = setInterval(function () {
+          timeLeft--;
+          timerElement.innerText = timeLeft;
+
+          if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            timerBox.style.display = "none";
+            resendBtn.style.display = "block";
+          }
+        }, 1000);
+      </script>
+    </div>
+  </div>
+</div>

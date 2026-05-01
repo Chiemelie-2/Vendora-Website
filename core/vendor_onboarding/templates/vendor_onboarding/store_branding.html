@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Branding - Vendora Eats</title>
+    <link rel="stylesheet" href="{% static 'css/vendor_onboarding.css' %}">     
+</head>
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sb-logo">
+            <div class="sb-logo-icon">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" style="height:16px;width:auto;">
+            </div>
+            <span class="sb-logo-name">Vendora <span class="sb-logo-eats">Eats</span></span>
+        </div>
+
+        <div class="steps">
+            <div class="step done">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="step-label">Business info</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step done">
+                <div class="step-dot">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="step-label">Location</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step active">
+                <div class="step-dot">3</div>
+                <div class="step-label">Store branding</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-dot">4</div>
+                <div class="step-label">Menu</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-dot">5</div>
+                <div class="step-label">Review & submit</div>
+            </div>
+        </div>
+
+        <p class="sb-footer">© 2026 Vendora Eats</p>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+        <div class="main-header">
+            <h1>Make your store look great</h1>
+            <p>Add your logo and cover photo — this is what customers see first</p>
+        </div>
+
+        <div class="main-body">
+            <div class="form-col">
+
+                <form method="POST" action="{% url 'vendor_onboarding:store_branding' %}"
+                      enctype="multipart/form-data" id="brandingForm">
+                    {% csrf_token %}
+
+                    <!-- LOGO UPLOAD -->
+                    <div class="upload-section">
+                        <h3>Store logo</h3>
+                        <p>Recommended: 512×512px · PNG or JPG</p>
+                        <div class="logo-upload-wrap">
+                           <div class="logo-circle" onclick="document.getElementById('logo-input').click()">
+                                <img id="logo-preview"
+                                    src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}"
+                                    alt="Logo preview"
+                                    style="{% if restaurant.logo %}display:block{% endif %}">
+                                <div class="logo-placeholder" id="logo-placeholder"
+                                    style="{% if restaurant.logo %}display:none{% endif %}">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="8" r="4"/>
+                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                                    </svg>
+                                    <span>Logo</span>
+                                </div>
+                            </div>
+                            <div class="logo-upload-info">
+                                <label class="upload-btn" for="logo-input">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                    Upload logo
+                                </label>
+                                <input type="file" id="logo-input" name="logo"
+                                    accept="image/*"
+                                    onchange="previewImage(this, 'logo-preview', 'logo-placeholder', 'prev-logo-img', 'prev-logo-placeholder')">
+                                <p>Max 5MB · PNG, JPG, SVG</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COVER UPLOAD -->
+                    <div class="upload-section">
+                        <h3>Cover photo</h3>
+                        <p>Recommended: 1200×600px · PNG or JPG</p>
+                       <div class="cover-upload-wrap" onclick="document.getElementById('cover-input').click()"
+                            id="cover-drop-zone">
+                            <img id="cover-preview"
+                                src="{% if restaurant.cover_image %}{{ restaurant.cover_image.url }}{% endif %}"
+                                alt="Cover"
+                                style="{% if restaurant.cover_image %}display:block{% endif %}">
+                            <div class="cover-placeholder" id="cover-placeholder"
+                                style="{% if restaurant.cover_image %}display:none{% endif %}">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <span>Click to upload cover photo</span>
+                                <small>or drag and drop</small>
+                            </div>
+                        </div>
+                        <input type="file" id="cover-input" name="cover_image"
+                            accept="image/*"
+                            onchange="previewCover(this)">
+                    </div>
+
+                    <div class="footer-row">
+                        <button type="button" class="skip-link"
+                            onclick="window.location='{% url 'vendor_onboarding:menu' %}'">
+                            Skip for now
+                        </button>
+                        <div style="display:flex;gap:10px;">
+                            <button type="button" class="btn-back"
+                                onclick="window.history.back()">Back</button>
+                            <button type="submit" class="btn-next">Continue →</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- LIVE PREVIEW -->
+            <div class="preview-col">
+                <p class="preview-label">Live preview</p>
+                <div class="preview-card">
+                    <div class="preview-cover">
+                        <img id="prev-cover-img" src="" alt="">
+                        <div class="preview-logo-wrap">
+                            <img id="prev-logo-img" src="" alt="">
+                            <svg class="preview-logo-placeholder" id="prev-logo-placeholder"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="preview-body-branding">
+                        <div class="preview-name">{{ restaurant.name|default:"Your store" }}</div>
+                        <div class="preview-cat">{{ restaurant.category|default:"Category" }}</div>
+                        <div class="preview-tag">Open now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Logo preview — updates circle + sidebar preview
+function previewImage(input, previewId, placeholderId, prevImgId, prevPlaceholderId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        // Main circle
+        const img = document.getElementById(previewId);
+        img.src = e.target.result;
+        img.style.display = 'block';
+        document.getElementById(placeholderId).style.display = 'none';
+
+        // Live preview logo
+        const prevImg = document.getElementById(prevImgId);
+        prevImg.src = e.target.result;
+        prevImg.style.display = 'block';
+        document.getElementById(prevPlaceholderId).style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+}
+
+// Cover preview — updates cover zone + preview card
+function previewCover(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        // Cover zone
+        const img = document.getElementById('cover-preview');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        document.getElementById('cover-placeholder').style.display = 'none';
+
+        // Live preview cover
+        const prevCover = document.getElementById('prev-cover-img');
+        prevCover.src = e.target.result;
+        prevCover.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+// Drag and drop for cover
+const dropZone = document.getElementById('cover-drop-zone');
+
+dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#2F8F2F';
+    dropZone.style.background = '#f0fdf4';
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = '#e5e7eb';
+    dropZone.style.background = '#f9fafb';
+});
+
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#e5e7eb';
+    dropZone.style.background = '#f9fafb';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        document.getElementById('cover-input').files = dt.files;
+        previewCover(document.getElementById('cover-input'));
+    }
+});
+</script>
+</body>
+</html>

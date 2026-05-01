@@ -1,0 +1,16 @@
+{% for restaurant in restaurants %}
+<div class="card">
+    <img src="{{ restaurant.image.url }}">
+    <div class="card-body">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <h3>{{ restaurant.name }}</h3>
+            {% if restaurant.is_verified %}
+                <span title="Verified Vendor" style="color: #1DA1F2; font-size: 1.2rem;">✔</span>
+            {% endif %}
+        </div>
+        <p>{{ restaurant.description }}</p>
+    </div>
+</div>
+{% empty %}
+<p>No restaurants found matching your search.</p>
+{% endfor %}

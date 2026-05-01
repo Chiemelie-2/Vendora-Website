@@ -1,0 +1,79 @@
+<!-- restaurants/templates/restaurants/register_restaurant.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}">
+
+<div class="merchant-page">
+    <div class="merchant-hero">
+        <h1>Become a Food merchant and grow your revenue</h1>
+        <p>Bolt Food merchants enjoy more orders, increased sales, and unmatched visibility — sign up today and reap the benefits!</p>
+    </div>
+
+    <div class="merchant-form-container">
+        <div class="merchant-card">
+            <h2>Let us help your business grow!</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
+                Already a partner? <a href="{% url 'accounts:login' %}" style="color: #34d399; text-decoration: none; font-weight: bold;">Log in ↗</a>
+            </p>
+
+            <form method="POST" action="{% url 'vendor_onboarding:vendor_register' %}">
+                {% csrf_token %}
+                
+                <!-- ROW 1: Business Name & Type -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Business name</label>
+                        <input type="text" name="name" placeholder="Enter business name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business type</label>
+                        <select name="category_group" required style="width: 100%; padding: 14px; border-radius: 12px; background: #f3f4f5; border: none;">
+                            <option value="1">Restaurant</option>
+                            <option value="2">Bakery</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ROW 2: Address & Post Code -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" name="address" placeholder="Enter your venue address" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Post code</label>
+                        <input type="text" name="post_code" placeholder="Enter post code" required>
+                    </div>
+                </div>
+
+                <!-- ROW 3: Email -->
+                {% comment %} <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="business_email" placeholder="Enter email address" required>
+                </div> {% endcomment %}
+
+                <!-- ROW 4: Phone Number -->
+                <div class="form-group">
+                    <label>Phone number</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="background: #f3f4f5; padding: 14px; border-radius: 12px; display: flex; align-items: center; gap: 5px;">
+                            🇳🇬 +234
+                        </div>
+                        <input type="text" name="phone_number" placeholder="Mobile number" required style="flex-grow: 1;">
+                    </div>
+                </div>
+
+                {% if form.errors %}
+                    <div style="background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                        Please correct the errors below.
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="btn-submit">Get started</button>
+            </form>
+        </div>
+    </div>
+</div>

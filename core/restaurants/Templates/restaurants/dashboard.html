@@ -1,0 +1,144 @@
+<!-- restaurants/templates/restaurants/dashboard.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<div class="dashboard-header">
+  <h1>{{ restaurants.first.name }} Dashboard</h1>
+
+  {% if not restaurants.first.is_verified %}
+  <div
+    style="
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ffeeba;
+    "
+  >
+    ⚠️ <strong>Your store is under review.</strong>
+    Customers will be able to see your menu once an admin verifies your
+    business.
+  </div>
+  {% else %}
+  <div style="color: #28a745; font-weight: bold; margin-bottom: 20px">
+    ✅ Verified Vendor
+  </div>
+  <!-- Inside dashboard.html -->
+  <div
+    class="status-banner"
+    style="padding: 20px; border-radius: 12px; margin-bottom: 25px"
+  >
+    {% if restaurants.first.status == 'pending' %}
+    <div
+      style="
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        padding: 15px;
+      "
+    >
+      ⏳ <strong>Status: Pending Review</strong><br />
+      Your store and products are hidden from customers until an admin verifies
+      your business.
+    </div>
+    {% elif restaurants.first.status == 'rejected' %}
+    <div
+      style="
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 15px;
+      "
+    >
+      ❌ <strong>Status: Rejected</strong><br />
+      Your application was not approved. Please contact support to resolve
+      issues.
+    </div>
+    {% else %}
+    <div
+      style="
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        padding: 15px;
+      "
+    >
+      ✅ <strong>Status: Verified & Live</strong><br />
+      Your store is now visible to customers!
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Inside dashboard to include the action buttons for the vendor. <tbody> -->
+  <tr>
+    <td style="padding: 15px">#{{ item.order.id }}</td>
+    <td style="padding: 15px">
+      {{ item.product.name }} (x{{ item.quantity }})
+    </td>
+    <td style="padding: 15px">
+      <!-- Dynamic Status Badge -->
+      <span
+        class="badge-{{ item.status }}"
+        style="
+          padding: 5px 10px;
+          border-radius: 5px;
+          font-size: 0.8rem;
+          background: #eee;
+        "
+      >
+        {{ item.get_status_display }}
+      </span>
+    </td>
+    <td style="padding: 15px">
+      <!-- ACTION BUTTONS -->
+      {% if item.status == 'received' %}
+      <a
+        href="{% url 'restaurants:update_status' item.id 'preparing' %}"
+        class="btn-sm"
+        style="
+          background: #007bff;
+          color: #fff;
+          padding: 5px 10px;
+          text-decoration: none;
+          border-radius: 4px;
+        "
+        >Start Preparing</a
+      >
+      {% elif item.status == 'preparing' %}
+      <a
+        href="{% url 'restaurants:update_status' item.id 'on_way' %}"
+        class="btn-sm"
+        style="
+          background: #ffc107;
+          color: #000;
+          padding: 5px 10px;
+          text-decoration: none;
+          border-radius: 4px;
+        "
+        >Out for Delivery</a
+      >
+      {% elif item.status == 'on_way' %}
+      <a
+        href="{% url 'restaurants:update_status' item.id 'delivered' %}"
+        class="btn-sm"
+        style="
+          background: #28a745;
+          color: #fff;
+          padding: 5px 10px;
+          text-decoration: none;
+          border-radius: 4px;
+        "
+        >Mark Delivered</a
+      >
+      {% endif %}
+    </td>
+  </tr>
+  <div style="margin-bottom: 20px;">
+    <a href="{% url 'restaurants:add_product' %}" style="background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 8px;">
+        + Add New Dish
+    </a>
+</div>
+
+
+  {% endif %}
+</div>

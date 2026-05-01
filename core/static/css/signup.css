@@ -1,0 +1,301 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+}
+
+/* Input design */
+.onboarding-container {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.container{
+    height: 90%;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background: #FFFFFF;
+    border-radius: 20px;
+    width: 60%;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 50vh;
+    object-fit: cover;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.content {
+    padding: 30px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+p {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 40px;
+}
+
+.btn-get-started {
+    background-color: #1FCB03;
+    color: #fff;
+    padding: 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background 0.3s;
+}
+
+.btn-get-started:hover {
+    background: #18B800;
+    box-shadow: 0 4px 15px rgba(24, 184, 0, 0.4);
+}
+/* static/css/onboarding.css updates */
+.auth-card {
+    flex: 1;            /* take remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;          /* remove auto margin that was centering it weirdly */
+    max-width: 400px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 50px;
+
+}
+
+
+.float-fieldset {
+    position: relative;
+    border: 1.5px solid #000;
+    border-radius: 6px;
+    padding: 0 12px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+
+.float-fieldset input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    padding: 16px 0 6px 0; /* ← top padding makes room for floated label */
+    background: transparent;
+    box-sizing: border-box;
+    top: 60%;
+    left: 12px;
+}
+
+.float-fieldset label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #888;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background: #fff;
+    padding: 0 4px;
+}
+
+/* Float label up to border — exactly like your screenshot */
+.float-fieldset input:focus + label,
+.float-fieldset input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 0.75rem;
+    color: #2F8F2F; /* ← change to your brand color */
+}
+
+/* Green border on focus */
+.float-fieldset:focus-within {
+    border-color: #2F8F2F;
+    border-width: 2px;
+}
+
+
+/* side image */
+.hero-images {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background: #1a2e1a; /* fallback while image loads */
+    width: 380px;       /* fixed width for left panel */
+    max-width: 400px;   /* prevent it from shrinking */
+
+}
+
+.hero-images img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25; /* subtle bg texture */
+    display: block;
+}
+
+/* Dark green overlay */
+.hero-images::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* background: linear-gradient(160deg, rgba(21,90,31,0.92) 0%, rgba(10,40,15,0.97) 100%); */
+    z-index: 1;
+}
+
+/* Text above overlay */
+.hero-text {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px;
+}
+
+/* Logo row */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.logo-icon {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #fffffe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 0;
+}
+.logo-icon img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1; /* subtle bg texture */
+    display: block;
+}
+
+.logo-text {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.logo-text h2 {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.logo-text p {
+    color: #96fc29;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Center content */
+.hero-subtext {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    z-index: 100;
+}
+
+.hero-subtext::before {
+    content: "";
+    width: 48px;
+    height: 3px;
+    background: #96fc29;
+    border-radius: 2px;
+    display: block;
+}
+
+.hero-subtext h1 {
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 0;
+    text-align: left;
+}
+
+.hero-subtext p {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Feature bullets */
+.hero-features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.hero-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero-feature-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(150,252,41,0.15);
+    border: 1px solid rgba(150,252,41,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.hero-feature-item span {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.85rem;
+}
+
+/* Footer */
+.hero-footer {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    margin: 0;
+}
